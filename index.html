@@ -8,11 +8,8 @@
     <link rel="apple-touch-icon" href="icons/icon-192.png">
     <meta name="theme-color" content="#080a0f">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js">
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg: #080a0f;
@@ -55,6 +52,7 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            position: relative;
         }
 
         body::before {
@@ -62,11 +60,32 @@
             position: fixed;
             inset: 0;
             z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(91, 138, 245, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(62, 207, 190, 0.06) 0%, transparent 60%);
+            animation: bgPulse 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
             background-image:
                 linear-gradient(rgba(91, 138, 245, 0.025) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(91, 138, 245, 0.025) 1px, transparent 1px);
             background-size: 40px 40px;
-            pointer-events: none;
         }
 
         #app {
@@ -106,6 +125,7 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .chip {
@@ -267,7 +287,6 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--teal));
             border-radius: 3px 3px 0 0;
             opacity: 0;
             transition: opacity 0.2s;
@@ -904,87 +923,37 @@
             }
         }
 
-        /* Cyberpunk Neon Theme Override */
-        body.theme-cyberpunk-neon {
-            background: #05010d !important;
-            color: #ff007f !important;
-            font-family: 'Syne', sans-serif !important;
+        /* Sound toggle */
+        .sound-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            color: var(--text-2);
         }
-        body.theme-cyberpunk-neon::before {
-            background-image: linear-gradient(rgba(255, 0, 127, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 127, 0.02) 1px, transparent 1px) !important;
-        }
-        body.theme-cyberpunk-neon .question-card,
-        body.theme-cyberpunk-neon .deck-card,
-        body.theme-cyberpunk-neon .nav-tabs,
-        body.theme-cyberpunk-neon .option-btn,
-        body.theme-cyberpunk-neon .flashcard-front,
-        body.theme-cyberpunk-neon .flashcard-back {
-            background: #0d021a !important;
-            border: 1px solid #ff007f !important;
-            color: #00ffff !important;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.2) !important;
-        }
-        body.theme-cyberpunk-neon .wordmark em,
-        body.theme-cyberpunk-neon .xp-level-badge,
-        body.theme-cyberpunk-neon .btn-primary {
-            background: #ff007f !important;
-            color: #000000 !important;
-            font-weight: 800;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4) !important;
-        }
-        body.theme-cyberpunk-neon .option-btn.correct {
-            background: rgba(0, 255, 255, 0.15) !important;
-            border-color: #00ffff !important;
-            color: #00ffff !important;
+        .sound-toggle:hover {
+            background: var(--s3);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .stat-box {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            border-radius: var(--r-lg);
-            padding: 20px 18px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-val {
+        .combo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
             font-family: 'Syne', sans-serif;
             font-weight: 800;
-            font-size: 1.7rem;
-            color: var(--text);
-            line-height: 1.2;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            animation: pulseFlame 1.2s infinite alternate;
+            box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
         }
 
-        .stat-lbl {
-            font-size: 0.72rem;
-            color: var(--text-3);
-            font-weight: 500;
-            margin-top: 4px;
-        }
-
-        .storage-bar {
-            height: 6px;
-            background: var(--s3);
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 8px 0;
-        }
-
-        .storage-fill {
-            height: 100%;
-            background: var(--good);
-            transition: width 0.4s var(--ease);
-            border-radius: 6px;
-        }
-
-        /* Premium Form Styling */
+        /* Form and panel styling */
         .form-input,
         .form-textarea,
         select {
@@ -1101,6 +1070,51 @@
             color: var(--text-3);
         }
 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 20px 18px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-val {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.7rem;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .stat-lbl {
+            font-size: 0.72rem;
+            color: var(--text-3);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .storage-bar {
+            height: 6px;
+            background: var(--s3);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .storage-fill {
+            height: 100%;
+            background: var(--good);
+            transition: width 0.4s var(--ease);
+            border-radius: 6px;
+        }
+
         @media (max-width: 600px) {
             #app {
                 padding: 16px 12px 60px;
@@ -1146,6 +1160,7 @@
                 </select>
             </div>
             <div class="header-pills">
+                <button class="sound-toggle" id="sound-toggle-btn" title="Toggle sound effects">🔊</button>
                 <div class="chip">XP <b id="h-xp">0</b></div>
                 <div class="chip">Acc <b id="h-acc">—</b></div>
                 <div class="chip">🔥 <b id="h-str">0</b></div>
@@ -1188,12 +1203,14 @@
                     <button class="btn btn-ghost btn-sm" onclick="exitStudy()">← Back</button>
                     <div class="study-meta" id="study-meta-label" style="font-size:0.8rem; color:var(--text-2);">— due</div>
                     <div style="display:flex; gap:8px; align-items:center;">
+                        <span id="combo-indicator"></span>
                         <label id="prefs-type-answer-wrap" style="display: none; align-items: center; gap: 6px; cursor: pointer; font-size: 0.75rem; color: var(--text-2);">
                             <input type="checkbox" id="prefs-type-answer" style="accent-color: var(--teal);"> ✍️ Type Answer
                         </label>
                         <div class="timer-wrap">
                             <span id="timer-text">60s</span>
                         </div>
+                        <button id="timefreeze-btn" class="btn btn-ghost btn-sm" style="display:none; border-color:var(--teal); color:var(--teal);" onclick="useTimeFreeze()">❄️ Freeze</button>
                         <button id="session-delete-btn" class="btn-delete-session" title="Permanently remove this card">🗑 Remove card</button>
                     </div>
                 </div>
@@ -1320,6 +1337,18 @@
                 </div>
             </div>
 
+            <!-- Daily Challenge -->
+            <div class="stat-box" style="margin-bottom: 20px;">
+                <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">🎯 Daily Challenge</div>
+                <div id="daily-challenge-box" style="font-size:0.85rem; color:var(--text-2);"></div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="stat-box" style="margin-bottom: 20px;">
+                <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">🏆 Achievements</div>
+                <div id="achievements-box" style="display:flex; flex-wrap:wrap; gap:8px; font-size:1.5rem;"></div>
+            </div>
+
             <!-- Heatmap Grid -->
             <div class="stat-box" style="margin-bottom: 20px;">
                 <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">Activity Heatmap (Last 12 Weeks)</div>
@@ -1370,7 +1399,18 @@
                 </button>
             </div>
 
-            <!-- Premium Themes Unlock -->
+            <!-- Time Freeze -->
+            <div style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <div>
+                    <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">⏳ Time Freeze (10s)</div>
+                    <div style="font-size: 0.75rem; color: var(--text-3);" id="timefreeze-desc">Pause timer once per question. (Owned: 0)</div>
+                </div>
+                <button class="btn btn-ghost" onclick="buyTimeFreeze()" style="border-color: var(--teal); color: var(--teal);">
+                    ⏱️ 150 XP
+                </button>
+            </div>
+
+            <!-- Cyberpunk Theme Unlock -->
             <div style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div>
                     <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">🎨 Cyberpunk Neon Theme</div>
@@ -1388,6 +1428,50 @@
     <div id="toast"></div>
 
     <script>
+        // ---------- Sound Engine ----------
+        const SoundManager = (() => {
+            let audioCtx = null;
+            let muted = localStorage.getItem('recall_sound_muted') === 'true';
+
+            function getCtx() {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                return audioCtx;
+            }
+
+            function playTone(freq, type, duration, vol = 0.1) {
+                if (muted) return;
+                try {
+                    const ctx = getCtx();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                    gain.gain.setValueAtTime(vol, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + duration);
+                } catch (e) { /* ignore */ }
+            }
+
+            return {
+                playCorrect() { playTone(880, 'sine', 0.15); setTimeout(() => playTone(1100, 'sine', 0.15), 100); },
+                playIncorrect() { playTone(200, 'square', 0.2, 0.08); },
+                playFlip() { playTone(600, 'triangle', 0.08, 0.05); },
+                playAchievement() { playTone(523, 'sine', 0.1); setTimeout(() => playTone(659, 'sine', 0.1), 120); setTimeout(() => playTone(784, 'sine', 0.2), 240); },
+                playCombo() { playTone(1047, 'triangle', 0.12); },
+                mute() { muted = !muted; localStorage.setItem('recall_sound_muted', muted); return muted; },
+                isMuted() { return muted; }
+            };
+        })();
+
+        document.getElementById('sound-toggle-btn').addEventListener('click', () => {
+            const muted = SoundManager.mute();
+            document.getElementById('sound-toggle-btn').textContent = muted ? '🔇' : '🔊';
+        });
+        if (SoundManager.isMuted()) document.getElementById('sound-toggle-btn').textContent = '🔇';
+
         // ---------- IndexedDB Core ----------
         const DB_NAME = 'RecallEngine';
         let db = null;
@@ -1465,14 +1549,14 @@
             return total / 1048576;
         }
 
-        // ---------- New scheduler (SM-2 with learning steps) ----------
-        const LEARNING_STEPS = [1, 10]; // minutes, then graduate to 1 day
+        // ---------- New scheduler (SM-2 with learning steps, 5min cooldown on wrong) ----------
+        const LEARNING_STEPS = [5, 20]; // minutes, first step 5 min to prevent immediate reappearance
+        const REVIEW_COOLDOWN = 300; // seconds (5 min) to skip card after any review
 
         function gradeCard(cardState, button, elapsedSeconds) {
             const now = Date.now() / 1000;
             const MINUTE = 60;
             const DAY = 86400;
-
             let { type, step, ease, interval } = cardState;
             if (!ease) ease = 250;
             if (!interval) interval = 0;
@@ -1535,9 +1619,11 @@
                 ease,
                 interval: type === 'review' ? interval : Math.ceil(interval / DAY * 100) / 100,
                 due: Math.round(due),
+                lastReview: Math.round(now)
             };
         }
 
+        // ---------- Init Stats ----------
         async function initStats() {
             let stats = await getData('stats', 'main');
             if (!stats) {
@@ -1554,15 +1640,110 @@
                     unlockedThemes: ['default'],
                     currentTheme: 'default',
                     dailyActivity: {},
-                    retentionLogs: []
+                    retentionLogs: [],
+                    timeFreezes: 0,
+                    achievements: {},
+                    dailyChallenge: null
                 };
                 await setData('stats', 'main', stats);
             }
             if (stats.xpFreezes === undefined) stats.xpFreezes = 0;
+            if (stats.timeFreezes === undefined) stats.timeFreezes = 0;
             if (!stats.dailyXp) stats.dailyXp = {};
             if (!stats.unlockedThemes) stats.unlockedThemes = ['default'];
             if (!stats.dailyActivity) stats.dailyActivity = {};
             if (!stats.retentionLogs) stats.retentionLogs = [];
+            if (!stats.achievements) stats.achievements = {};
+            if (!stats.dailyChallenge) stats.dailyChallenge = null;
+            return stats;
+        }
+
+        // ---------- Achievements System ----------
+        const ACHIEVEMENTS = {
+            'perfect5': { name: 'Perfect 5', desc: '5 correct answers in a row', icon: '🎯' },
+            'perfect10': { name: 'Perfect 10', desc: '10 correct answers in a row', icon: '🔥' },
+            'speed_demon': { name: 'Speed Demon', desc: 'Answer in under 2 seconds', icon: '⚡' },
+            'night_owl': { name: 'Night Owl', desc: 'Study after 10 PM', icon: '🦉' },
+            'collector': { name: 'Collector', desc: 'Create 5 decks', icon: '📚' },
+            'centurion': { name: 'Centurion', desc: 'Answer 100 cards total', icon: '💯' },
+            'xp_master': { name: 'XP Master', desc: 'Earn 1000 XP', icon: '🌟' },
+            'streak7': { name: 'Week Warrior', desc: '7-day streak', icon: '📅' }
+        };
+
+        async function checkAchievements(stats, isCorrect, answerTimeSec, isNight, totalDecks) {
+            let newAch = false;
+            if (!stats.achievements) stats.achievements = {};
+
+            if (isCorrect && !stats.achievements.perfect5 && stats.totalCorrect >= 5) {
+                stats.achievements.perfect5 = true; newAch = true;
+            }
+            if (isCorrect && !stats.achievements.perfect10 && stats.totalCorrect >= 10) {
+                stats.achievements.perfect10 = true; newAch = true;
+            }
+            if (!stats.achievements.speed_demon && answerTimeSec <= 2) {
+                stats.achievements.speed_demon = true; newAch = true;
+            }
+            if (!stats.achievements.night_owl && isNight) {
+                stats.achievements.night_owl = true; newAch = true;
+            }
+            if (!stats.achievements.centurion && stats.totalAnswered >= 100) {
+                stats.achievements.centurion = true; newAch = true;
+            }
+            if (!stats.achievements.xp_master && stats.xp >= 1000) {
+                stats.achievements.xp_master = true; newAch = true;
+            }
+            if (!stats.achievements.streak7 && stats.streakDays >= 7) {
+                stats.achievements.streak7 = true; newAch = true;
+            }
+            if (totalDecks >= 5 && !stats.achievements.collector) {
+                stats.achievements.collector = true; newAch = true;
+            }
+
+            if (newAch) {
+                SoundManager.playAchievement();
+                triggerConfetti();
+                toast('🏆 New Achievement Unlocked!');
+            }
+            return stats;
+        }
+
+        // ---------- Daily Challenge ----------
+        function generateDailyChallenge() {
+            const challenges = [
+                { desc: 'Answer 20 cards today', goal: 20, type: 'cards' },
+                { desc: 'Get 10 correct answers', goal: 10, type: 'correct' },
+                { desc: 'Achieve a 5-card combo', goal: 5, type: 'combo' },
+                { desc: 'Study 3 different decks', goal: 3, type: 'decks' },
+                { desc: 'Answer 5 flashcards correctly', goal: 5, type: 'flashcard' }
+            ];
+            return challenges[Math.floor(Math.random() * challenges.length)];
+        }
+
+        async function updateDailyChallenge(stats, isCorrect, deckType) {
+            if (!stats.dailyChallenge) {
+                stats.dailyChallenge = generateDailyChallenge();
+                stats.dailyChallenge.progress = 0;
+                stats.dailyChallenge.completed = false;
+            }
+            const ch = stats.dailyChallenge;
+            if (ch.completed) return stats;
+
+            let progress = ch.progress || 0;
+            if (ch.type === 'cards') progress++;
+            else if (ch.type === 'correct' && isCorrect) progress++;
+            else if (ch.type === 'combo' && currentSessionCombo >= ch.goal) progress = ch.goal;
+            else if (ch.type === 'decks') progress = Math.min(progress + 1, ch.goal);
+            else if (ch.type === 'flashcard' && deckType === 'flashcard' && isCorrect) progress++;
+
+            ch.progress = Math.min(progress, ch.goal);
+            if (ch.progress >= ch.goal && !ch.completed) {
+                ch.completed = true;
+                stats.xp += 30;
+                toast('✅ Daily Challenge Complete! +30 XP');
+                triggerConfetti();
+                SoundManager.playAchievement();
+            }
+            stats.dailyChallenge = ch;
             return stats;
         }
 
@@ -1586,35 +1767,35 @@
                 else if (stats.streakDays >= 5) streakEl.classList.add('streak-silver');
                 else if (stats.streakDays > 0) streakEl.classList.add('streak-bronze');
             }
+
+            const comboIndicator = document.getElementById('combo-indicator');
+            if (comboIndicator) {
+                if (currentSessionCombo >= 3) {
+                    comboIndicator.innerHTML = `<span class="combo-badge">🔥 x${currentSessionCombo} Combo</span>`;
+                } else {
+                    comboIndicator.innerHTML = '';
+                }
+            }
         };
 
         async function triggerAdvancedDopamineReward(isCorrect, durationSeconds, anchorsAnchorNode) {
             let stats = await initStats();
             stats.totalAnswered++;
-
-            let baseXP = 0;
-
             if (isCorrect) {
                 stats.totalCorrect++;
                 currentSessionCombo++;
-
-                baseXP = 10;
-                if (durationSeconds <= 3) baseXP = 15;
-
-                if (currentSessionCombo >= 3) {
-                    baseXP = Math.round(baseXP * 1.5);
-                }
+                if (currentSessionCombo >= 3) SoundManager.playCombo();
             } else {
                 currentSessionCombo = 0;
-                baseXP = -2;
             }
 
+            let baseXP = isCorrect ? 10 : -2;
+            if (isCorrect && durationSeconds <= 3) baseXP = 15;
+            if (currentSessionCombo >= 3) baseXP = Math.round(baseXP * 1.5);
+
             let actualXpGain = baseXP;
-            if (baseXP > 0) {
-                const isDoubleXp = stats.doubleXpExpiry && stats.doubleXpExpiry > Date.now();
-                if (isDoubleXp) {
-                    actualXpGain = baseXP * 2;
-                }
+            if (baseXP > 0 && stats.doubleXpExpiry && stats.doubleXpExpiry > Date.now()) {
+                actualXpGain = baseXP * 2;
             }
 
             stats.xp = Math.max(0, stats.xp + actualXpGain);
@@ -1656,8 +1837,7 @@
                     if (neededFreezes > 0 && stats.xpFreezes && stats.xpFreezes >= neededFreezes) {
                         stats.xpFreezes -= neededFreezes;
                         stats.streakDays = stats.streakDays + 1;
-                        setTimeout(() => toast(`❄️ Used ${neededFreezes} Streak Freeze(s) to save your streak!`),
-                            500);
+                        setTimeout(() => toast(`❄️ Used ${neededFreezes} Streak Freeze(s) to save your streak!`), 500);
                     } else {
                         stats.streakDays = 1;
                     }
@@ -1667,6 +1847,11 @@
                 stats.streakDays = 1;
                 stats.lastStudyDay = today;
             }
+
+            const isNight = new Date().getHours() >= 22;
+            const deckCount = Object.keys(await getAllDecks()).length + (await getAllKeys('notes')).length;
+            stats = await checkAchievements(stats, isCorrect, durationSeconds, isNight, deckCount);
+            stats = await updateDailyChallenge(stats, isCorrect, currentDeckType);
 
             await setData('stats', 'main', stats);
 
@@ -1749,6 +1934,29 @@
             await loadStats();
         }
         window.buyHintToken = buyHintToken;
+
+        async function buyTimeFreeze() {
+            let stats = await initStats();
+            if (stats.xp < 150) return toast("❌ Need 150 XP");
+            stats.xp -= 150;
+            stats.timeFreezes = (stats.timeFreezes || 0) + 1;
+            await setData('stats', 'main', stats);
+            toast("⏳ Time Freeze acquired! You have " + stats.timeFreezes);
+            loadStats();
+        }
+        window.buyTimeFreeze = buyTimeFreeze;
+
+        window.useTimeFreeze = async function() {
+            let stats = await initStats();
+            if (!stats.timeFreezes || stats.timeFreezes <= 0) return toast("No Time Freezes left");
+            stats.timeFreezes--;
+            await setData('stats', 'main', stats);
+            timerSeconds += 10;
+            document.getElementById('timer-text').textContent = timerSeconds + 's';
+            document.getElementById('timefreeze-btn').style.display = 'none';
+            toast("⏳ +10 seconds added to timer");
+            loadStats();
+        };
 
         async function buyCyberpunkTheme() {
             let stats = await initStats();
@@ -1867,8 +2075,7 @@
             clearAutoTimer();
             stopTimer();
 
-            let cards = (currentDeckType === 'flashcard') ? await getNotesCollection(currentDeck) : await
-            getDeckCards(currentDeck);
+            let cards = (currentDeckType === 'flashcard') ? await getNotesCollection(currentDeck) : await getDeckCards(currentDeck);
             let prog = await getProgress(currentDeck);
 
             cards.splice(currentCard.idx, 1);
@@ -1899,8 +2106,7 @@
                 typeWrap.style.display = currentDeckType === 'flashcard' ? 'inline-flex' : 'none';
             }
 
-            const cards = (currentDeckType === 'flashcard') ? await getNotesCollection(currentDeck) : await
-            getDeckCards(currentDeck);
+            const cards = (currentDeckType === 'flashcard') ? await getNotesCollection(currentDeck) : await getDeckCards(currentDeck);
             const prog = await getProgress(currentDeck);
             const now = Date.now() / 1000;
 
@@ -1908,18 +2114,20 @@
             for (let i = 0; i < cards.length; i++) {
                 const p = prog[i] || null;
                 const dueTime = p ? (p.due || p.nextReview || 0) : 0;
+                const lastReview = p?.lastReview || 0;
+                // Apply cooldown: skip if reviewed within the last 5 minutes
+                if (p && lastReview && (now - lastReview) < REVIEW_COOLDOWN) continue;
                 if (!p || dueTime <= now) due.push(i);
             }
 
             if (due.length === 0) {
                 document.getElementById('card-area').innerHTML = `
-              <div class="done-card" style="text-align:center; padding:40px 20px;">
-                <div class="done-emoji" style="font-size:3rem; margin-bottom:12px;">🎉</div>
-                <div class="done-title" style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:8px;">All done!</div>
-                <div class="done-sub" style="color:var(--text-3); font-size:0.85rem; margin-bottom:20px;">Next due review is later.</div>
-                <button class="btn btn-ghost" onclick="exitStudy()">← Back to Picker</button>
-              </div>
-            `;
+                <div class="done-card" style="text-align:center; padding:40px 20px;">
+                    <div class="done-emoji" style="font-size:3rem; margin-bottom:12px;">🎉</div>
+                    <div class="done-title" style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:8px;">All done!</div>
+                    <div class="done-sub" style="color:var(--text-3); font-size:0.85rem; margin-bottom:20px;">Next due review is later.</div>
+                    <button class="btn btn-ghost" onclick="exitStudy()">← Back to Picker</button>
+                </div>`;
                 return;
             }
 
@@ -1934,6 +2142,11 @@
             document.getElementById('study-meta-label').textContent =
                 `${due.length} due · ${cards.length} total`;
             document.getElementById('study-progress').style.width = ((1 - due.length / cards.length) * 100) + '%';
+
+            // Show time freeze button if user has tokens
+            const statsObj = await initStats();
+            const tfBtn = document.getElementById('timefreeze-btn');
+            if (tfBtn) tfBtn.style.display = (statsObj.timeFreezes > 0) ? 'inline-flex' : 'none';
 
             if (currentDeckType === 'flashcard') {
                 const question = card.topic || card.question || card.front || card.concept || 'No front content';
@@ -1952,39 +2165,35 @@
 
                 const isTypeAnswer = document.getElementById('prefs-type-answer')?.checked || false;
                 const typeInputHTML = isTypeAnswer ? `
-              <div style="margin-top: 16px; display: flex; gap: 8px;">
-                <input type="text" id="fc-type-input" placeholder="Type your answer here..." class="form-input" style="flex: 1; font-size: 0.9rem;" onkeydown="if(event.key==='Enter'){event.preventDefault(); flipFlashcard();}">
-                <button class="btn btn-primary" onclick="flipFlashcard()">Check</button>
-              </div>
-            ` : '';
+                <div style="margin-top: 16px; display: flex; gap: 8px;">
+                    <input type="text" id="fc-type-input" placeholder="Type your answer here..." class="form-input" style="flex: 1; font-size: 0.9rem;" onkeydown="if(event.key==='Enter'){event.preventDefault(); flipFlashcard();}">
+                    <button class="btn btn-primary" onclick="flipFlashcard()">Check</button>
+                </div>` : '';
 
                 document.getElementById('card-area').innerHTML = `
-              <div class="question-card" style="padding: 16px 20px 24px;">
-                <div class="card-eyebrow">
-                  <span>Ease ${currentCard.ease}%</span>
-                  <span>State: ${currentCard.type.toUpperCase()}</span>
-                </div>
-
-                <div class="flashcard-wrapper" id="flashcard-element" onclick="if(!document.getElementById('prefs-type-answer')?.checked) flipFlashcard();">
-                  <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                      <div class="flashcard-prompt">Concept / Question</div>
-                      <div class="flashcard-text">${esc(currentCard.question)}</div>
-                      <div style="font-size: 0.72rem; color: var(--text-3); margin-top: 24px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 20px;">👆 Tap card to reveal answer</div>
+                <div class="question-card" style="padding: 16px 20px 24px;">
+                    <div class="card-eyebrow">
+                        <span>Ease ${currentCard.ease}%</span>
+                        <span>State: ${currentCard.type.toUpperCase()}</span>
                     </div>
-                    <div class="flashcard-back">
-                      <div class="flashcard-prompt">Answer / Explanation</div>
-                      <div class="flashcard-text">${esc(currentCard.answer)}</div>
+                    <div class="flashcard-wrapper" id="flashcard-element" onclick="if(!document.getElementById('prefs-type-answer')?.checked) flipFlashcard();">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-prompt">Concept / Question</div>
+                                <div class="flashcard-text">${esc(currentCard.question)}</div>
+                                <div style="font-size: 0.72rem; color: var(--text-3); margin-top: 24px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 20px;">👆 Tap card to reveal answer</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-prompt">Answer / Explanation</div>
+                                <div class="flashcard-text">${esc(currentCard.answer)}</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                    ${typeInputHTML}
+                    <div id="flashcard-controls-area"></div>
                 </div>
-
-                ${typeInputHTML}
-                <div id="flashcard-controls-area"></div>
-              </div>
-              <div id="feedback-area"></div>
-              <div id="next-btn-area"></div>
-            `;
+                <div id="feedback-area"></div>
+                <div id="next-btn-area"></div>`;
             } else {
                 const opts = [card.option1, card.option2, card.option3, card.option4];
                 const correctText = card['option' + card.correct];
@@ -2018,34 +2227,30 @@
                 let optsHTML = '';
                 currentCard.options.forEach((opt, i) => {
                     optsHTML += `
-                <button class="option-btn" id="opt-${i + 1}" onclick="chooseAnswer(${i + 1})">
-                  <span class="opt-key" style="background:var(--s3); padding:3px 8px; border-radius:5px; font-size:0.75rem; font-weight:700; margin-right:10px;">${letters[i]}</span>
-                  ${esc(opt)}
-                </button>
-              `;
+                    <button class="option-btn" id="opt-${i + 1}" onclick="chooseAnswer(${i + 1})">
+                        <span class="opt-key" style="background:var(--s3); padding:3px 8px; border-radius:5px; font-size:0.75rem; font-weight:700; margin-right:10px;">${letters[i]}</span>
+                        ${esc(opt)}
+                    </button>`;
                 });
 
-                const statsObj = await initStats();
                 const hintCount = statsObj.hintTokens || 0;
                 const hintBtnHTML = hintCount > 0 ? `
-              <button id="use-hint-btn" class="btn btn-ghost btn-sm" onclick="useHintToken()" style="margin-top:10px; width:100%; border-color:var(--gold); color:var(--gold); justify-content:center;">
-                💡 Use Hint Token (${hintCount} left)
-              </button>
-            ` : '';
+                <button id="use-hint-btn" class="btn btn-ghost btn-sm" onclick="useHintToken()" style="margin-top:10px; width:100%; border-color:var(--gold); color:var(--gold); justify-content:center;">
+                    💡 Use Hint Token (${hintCount} left)
+                </button>` : '';
 
                 document.getElementById('card-area').innerHTML = `
-              <div class="question-card">
-                <div class="card-eyebrow">
-                  <span>Ease ${currentCard.ease}%</span>
-                  <span>State: ${currentCard.type.toUpperCase()}</span>
+                <div class="question-card">
+                    <div class="card-eyebrow">
+                        <span>Ease ${currentCard.ease}%</span>
+                        <span>State: ${currentCard.type.toUpperCase()}</span>
+                    </div>
+                    <div class="question-text" style="font-weight:600; font-size:1.05rem; margin-bottom:20px;">${esc(currentCard.question)}</div>
+                    <div class="options">${optsHTML}</div>
+                    ${hintBtnHTML}
                 </div>
-                <div class="question-text" style="font-weight:600; font-size:1.05rem; margin-bottom:20px;">${esc(currentCard.question)}</div>
-                <div class="options">${optsHTML}</div>
-                ${hintBtnHTML}
-              </div>
-              <div id="feedback-area"></div>
-              <div id="next-btn-area"></div>
-            `;
+                <div id="feedback-area"></div>
+                <div id="next-btn-area"></div>`;
             }
 
             startTimer(60);
@@ -2120,56 +2325,49 @@
         window.flipFlashcard = function() {
             const card = document.getElementById('flashcard-element');
             if (!card) return;
-
-            const isTypeAnswer = document.getElementById('prefs-type-answer')?.checked || false;
+            SoundManager.playFlip();
             card.classList.add('flipped');
 
             const ctrlArea = document.getElementById('flashcard-controls-area');
             if (ctrlArea && !ctrlArea.innerHTML) {
+                const isTypeAnswer = document.getElementById('prefs-type-answer')?.checked || false;
                 if (isTypeAnswer) {
                     const userVal = (document.getElementById('fc-type-input')?.value || '').trim();
                     const correctVal = currentCard.answer.trim();
-                    const cleanStr = s => s.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").replace(
-                        /\s+/g, " ");
+                    const cleanStr = s => s.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").replace(/\s+/g, " ");
                     const isMatch = cleanStr(userVal) === cleanStr(correctVal);
-
                     let matchFeedback = '';
                     if (isMatch) {
-                        matchFeedback =
-                            `<div style="color:var(--good); font-weight:600; margin-bottom:16px;">✅ Accurate! Your answer matches perfectly.</div>`;
+                        matchFeedback = `<div style="color:var(--good); font-weight:600; margin-bottom:16px;">✅ Accurate! Your answer matches perfectly.</div>`;
                     } else {
-                        matchFeedback =
-                            `<div style="color:var(--bad); font-weight:600; margin-bottom:16px;">❌ Mismatch.<br><small style="color:var(--text-3);">Your answer: "${esc(userVal)}"</small></div>`;
+                        matchFeedback = `<div style="color:var(--bad); font-weight:600; margin-bottom:16px;">❌ Mismatch.<br><small style="color:var(--text-3);">Your answer: "${esc(userVal)}"</small></div>`;
                     }
-
                     ctrlArea.innerHTML = `
-                <div style="text-align:center; width:100%;">
-                  ${matchFeedback}
-                  <div class="flashcard-controls">
-                    <div class="flashcard-btn-wrap">
-                      <button class="flashcard-btn flashcard-btn-dont-know" onclick="finalizeFlashcard('again')" title="I don't know it">✕</button>
-                      <span class="flashcard-btn-label">Don't Know</span>
-                    </div>
-                    <div class="flashcard-btn-wrap">
-                      <button class="flashcard-btn flashcard-btn-know-it" onclick="finalizeFlashcard('good')" title="I know it">✓</button>
-                      <span class="flashcard-btn-label">Know It</span>
-                    </div>
-                  </div>
-                </div>
-              `;
+                    <div style="text-align:center; width:100%;">
+                        ${matchFeedback}
+                        <div class="flashcard-controls">
+                            <div class="flashcard-btn-wrap">
+                                <button class="flashcard-btn flashcard-btn-dont-know" onclick="finalizeFlashcard('again')" title="I don't know it">✕</button>
+                                <span class="flashcard-btn-label">Don't Know</span>
+                            </div>
+                            <div class="flashcard-btn-wrap">
+                                <button class="flashcard-btn flashcard-btn-know-it" onclick="finalizeFlashcard('good')" title="I know it">✓</button>
+                                <span class="flashcard-btn-label">Know It</span>
+                            </div>
+                        </div>
+                    </div>`;
                 } else {
                     ctrlArea.innerHTML = `
-                <div class="flashcard-controls">
-                  <div class="flashcard-btn-wrap">
-                    <button class="flashcard-btn flashcard-btn-dont-know" onclick="finalizeFlashcard('again')" title="I don't know it">✕</button>
-                    <span class="flashcard-btn-label">Don't Know</span>
-                  </div>
-                  <div class="flashcard-btn-wrap">
-                    <button class="flashcard-btn flashcard-btn-know-it" onclick="finalizeFlashcard('good')" title="I know it">✓</button>
-                    <span class="flashcard-btn-label">Know It</span>
-                  </div>
-                </div>
-              `;
+                    <div class="flashcard-controls">
+                        <div class="flashcard-btn-wrap">
+                            <button class="flashcard-btn flashcard-btn-dont-know" onclick="finalizeFlashcard('again')" title="I don't know it">✕</button>
+                            <span class="flashcard-btn-label">Don't Know</span>
+                        </div>
+                        <div class="flashcard-btn-wrap">
+                            <button class="flashcard-btn flashcard-btn-know-it" onclick="finalizeFlashcard('good')" title="I know it">✓</button>
+                            <span class="flashcard-btn-label">Know It</span>
+                        </div>
+                    </div>`;
                 }
             }
         };
@@ -2191,12 +2389,14 @@
                 }
             }
 
+            if (isRight) SoundManager.playCorrect();
+            else SoundManager.playIncorrect();
+
             const explanationHtml = currentCard.explanation ? `
             <div class="explanation-card ${!isRight ? 'wrong-expl-highlight' : ''}" id="exp-box">
-              <strong>📖 EXPLANATION</strong>
-              ${esc(currentCard.explanation)}
-            </div>
-          ` : '';
+                <strong>📖 EXPLANATION</strong>
+                ${esc(currentCard.explanation)}
+            </div>` : '';
 
             let autoButton = 'again';
             if (isRight) {
@@ -2232,14 +2432,13 @@
             const fa = document.getElementById('feedback-area');
             fa.innerHTML = `
             <div class="feedback-card">
-              <div class="feedback-icon" style="font-size:1.4rem;">${isRight ? '✅' : '❌'}</div>
-              <div>
-                <div class="feedback-label" style="font-weight:700; color:${isRight ? 'var(--good)' : 'var(--bad)'}">${isRight ? 'Correct!' : 'Incorrect'}</div>
-                <div class="feedback-sub" style="font-size:0.78rem; color:var(--text-3);">Grade: ${autoButton.toUpperCase()}${nextIntervalStr}</div>
-              </div>
+                <div class="feedback-icon" style="font-size:1.4rem;">${isRight ? '✅' : '❌'}</div>
+                <div>
+                    <div class="feedback-label" style="font-weight:700; color:${isRight ? 'var(--good)' : 'var(--bad)'}">${isRight ? 'Correct!' : 'Incorrect'}</div>
+                    <div class="feedback-sub" style="font-size:0.78rem; color:var(--text-3);">Grade: ${autoButton.toUpperCase()}${nextIntervalStr}</div>
+                </div>
             </div>
-            ${explanationHtml}
-          `;
+            ${explanationHtml}`;
 
             const explanationDiv = document.getElementById('exp-box');
             if (explanationDiv) {
@@ -2250,8 +2449,7 @@
 
             autoAdvanceTimer = setTimeout(() => advanceStudySession(), isRight ? 5500 : 8000);
             const nb = document.getElementById('next-btn-area');
-            nb.innerHTML =
-                `<button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="clearTimeout(autoAdvanceTimer); advanceStudySession()">Continue →</button>`;
+            nb.innerHTML = `<button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="clearTimeout(autoAdvanceTimer); advanceStudySession()">Continue →</button>`;
         }
 
         window.finalizeFlashcard = function(button) {
@@ -2272,8 +2470,8 @@
             window._currentGradeContext = null;
             const { idx, isRight, elapsed, deck, type } = ctx;
 
-            let qualityButton = button;
-            if (!isRight) qualityButton = 'again';
+            if (isRight) SoundManager.playCorrect();
+            else SoundManager.playIncorrect();
 
             if (window._isCram) {
                 const cardBox = document.querySelector('.question-card');
@@ -2292,6 +2490,7 @@
                 interval: old.interval || 0,
                 due: old.due || old.nextReview || 0,
             };
+            const qualityButton = isRight ? 'good' : 'again';
             const updated = gradeCard(oldState, qualityButton, elapsed);
             prog[idx] = updated;
             await saveProgress(deck, prog);
@@ -2301,8 +2500,7 @@
 
             autoAdvanceTimer = setTimeout(() => advanceStudySession(), isRight ? 3500 : 5000);
             const nb = document.getElementById('next-btn-area');
-            nb.innerHTML =
-                `<button class="btn btn-primary" onclick="clearTimeout(autoAdvanceTimer); advanceStudySession()">Continue →</button>`;
+            nb.innerHTML = `<button class="btn btn-primary" onclick="clearTimeout(autoAdvanceTimer); advanceStudySession()">Continue →</button>`;
         }
         window.finalizeGrade = finalizeGrade;
 
@@ -2336,13 +2534,12 @@
             const cs = window._cramState;
             if (!cs || cs.currentIndex >= cs.indices.length) {
                 document.getElementById('card-area').innerHTML = `
-              <div class="done-card" style="text-align:center; padding:40px 20px;">
-                <div class="done-emoji" style="font-size:3rem; margin-bottom:12px;">🎉</div>
-                <div class="done-title" style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:8px;">Cram Completed!</div>
-                <div class="done-sub" style="color:var(--text-3); font-size:0.85rem; margin-bottom:20px;">You've studied all cards in this session.</div>
-                <button class="btn btn-ghost" onclick="exitStudy()">← Back</button>
-              </div>
-            `;
+                <div class="done-card" style="text-align:center; padding:40px 20px;">
+                    <div class="done-emoji" style="font-size:3rem; margin-bottom:12px;">🎉</div>
+                    <div class="done-title" style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:8px;">Cram Completed!</div>
+                    <div class="done-sub" style="color:var(--text-3); font-size:0.85rem; margin-bottom:20px;">You've studied all cards in this session.</div>
+                    <button class="btn btn-ghost" onclick="exitStudy()">← Back</button>
+                </div>`;
                 window._cramState = null;
                 window._isCram = false;
                 return;
@@ -2370,38 +2567,32 @@
 
                 const isTypeAnswer = document.getElementById('prefs-type-answer')?.checked || false;
                 const typeInputHTML = isTypeAnswer ? `
-              <div style="margin-top: 16px; display: flex; gap: 8px;">
-                <input type="text" id="fc-type-input" placeholder="Type your answer here..." class="form-input" style="flex: 1; font-size: 0.9rem;" onkeydown="if(event.key==='Enter'){event.preventDefault(); flipFlashcard();}">
-                <button class="btn btn-primary" onclick="flipFlashcard()">Check</button>
-              </div>
-            ` : '';
+                <div style="margin-top: 16px; display: flex; gap: 8px;">
+                    <input type="text" id="fc-type-input" placeholder="Type your answer here..." class="form-input" style="flex: 1; font-size: 0.9rem;" onkeydown="if(event.key==='Enter'){event.preventDefault(); flipFlashcard();}">
+                    <button class="btn btn-primary" onclick="flipFlashcard()">Check</button>
+                </div>` : '';
 
                 document.getElementById('card-area').innerHTML = `
-              <div class="question-card" style="padding: 16px 20px 24px;">
-                <div class="card-eyebrow">
-                  <span>⚡ Cram Mode</span>
-                </div>
-
-                <div class="flashcard-wrapper" id="flashcard-element" onclick="if(!document.getElementById('prefs-type-answer')?.checked) flipFlashcard();">
-                  <div class="flashcard-inner">
-                    <div class="flashcard-front">
-                      <div class="flashcard-prompt">Concept / Question</div>
-                      <div class="flashcard-text">${esc(currentCard.question)}</div>
-                      <div style="font-size: 0.72rem; color: var(--text-3); margin-top: 24px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 20px;">👆 Tap card to reveal answer</div>
+                <div class="question-card" style="padding: 16px 20px 24px;">
+                    <div class="card-eyebrow"><span>⚡ Cram Mode</span></div>
+                    <div class="flashcard-wrapper" id="flashcard-element" onclick="if(!document.getElementById('prefs-type-answer')?.checked) flipFlashcard();">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-prompt">Concept / Question</div>
+                                <div class="flashcard-text">${esc(currentCard.question)}</div>
+                                <div style="font-size: 0.72rem; color: var(--text-3); margin-top: 24px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 20px;">👆 Tap card to reveal answer</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-prompt">Answer / Explanation</div>
+                                <div class="flashcard-text">${esc(currentCard.answer)}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flashcard-back">
-                      <div class="flashcard-prompt">Answer / Explanation</div>
-                      <div class="flashcard-text">${esc(currentCard.answer)}</div>
-                    </div>
-                  </div>
+                    ${typeInputHTML}
+                    <div id="flashcard-controls-area"></div>
                 </div>
-
-                ${typeInputHTML}
-                <div id="flashcard-controls-area"></div>
-              </div>
-              <div id="feedback-area"></div>
-              <div id="next-btn-area"></div>
-            `;
+                <div id="feedback-area"></div>
+                <div id="next-btn-area"></div>`;
             } else {
                 const opts = [card.option1, card.option2, card.option3, card.option4];
                 const correctText = card['option' + card.correct];
@@ -2410,7 +2601,6 @@
                     const j = Math.floor(Math.random() * (i + 1));
                     [keys[i], keys[j]] = [keys[j], keys[i]];
                 }
-
                 let shuffled = [],
                     newCorrect = 0;
                 keys.forEach((orig, k) => {
@@ -2432,24 +2622,20 @@
                 let optsHTML = '';
                 currentCard.options.forEach((opt, i) => {
                     optsHTML += `
-                <button class="option-btn" id="opt-${i + 1}" onclick="chooseAnswer(${i + 1})">
-                  <span class="opt-key" style="background:var(--s3); padding:3px 8px; border-radius:5px; font-size:0.75rem; font-weight:700; margin-right:10px;">${letters[i]}</span>
-                  ${esc(opt)}
-                </button>
-              `;
+                    <button class="option-btn" id="opt-${i + 1}" onclick="chooseAnswer(${i + 1})">
+                        <span class="opt-key" style="background:var(--s3); padding:3px 8px; border-radius:5px; font-size:0.75rem; font-weight:700; margin-right:10px;">${letters[i]}</span>
+                        ${esc(opt)}
+                    </button>`;
                 });
 
                 document.getElementById('card-area').innerHTML = `
-              <div class="question-card">
-                <div class="card-eyebrow">
-                  <span>⚡ Cram Mode</span>
+                <div class="question-card">
+                    <div class="card-eyebrow"><span>⚡ Cram Mode</span></div>
+                    <div class="question-text" style="font-weight:600; font-size:1.05rem; margin-bottom:20px;">${esc(currentCard.question)}</div>
+                    <div class="options">${optsHTML}</div>
                 </div>
-                <div class="question-text" style="font-weight:600; font-size:1.05rem; margin-bottom:20px;">${esc(currentCard.question)}</div>
-                <div class="options">${optsHTML}</div>
-              </div>
-              <div id="feedback-area"></div>
-              <div id="next-btn-area"></div>
-            `;
+                <div id="feedback-area"></div>
+                <div id="next-btn-area"></div>`;
             }
 
             startTimer(60);
@@ -2498,17 +2684,14 @@
             }
 
             const isFlashcard = (currentDeckType === 'flashcard');
-
             if (isFlashcard) {
                 const flashcardEl = document.getElementById('flashcard-element');
                 const isFlipped = flashcardEl ? flashcardEl.classList.contains('flipped') : false;
-
                 if (!isFlipped && (event.key === ' ' || event.code === 'Space' || event.key === 'Enter')) {
                     event.preventDefault();
                     if (flashcardEl) flipFlashcard();
                     return;
                 }
-
                 if (isFlipped) {
                     if (event.key === '1') {
                         event.preventDefault();
@@ -2537,8 +2720,7 @@
             const stats = await initStats();
             window.updateHeaderPills(stats);
 
-            const acc = stats.totalAnswered ? Math.round(stats.totalCorrect / stats.totalAnswered * 100 * 10) / 10 :
-            0;
+            const acc = stats.totalAnswered ? Math.round(stats.totalCorrect / stats.totalAnswered * 100 * 10) / 10 : 0;
             document.getElementById('st-total').textContent = stats.totalAnswered;
             document.getElementById('st-acc').textContent = acc + '%';
             document.getElementById('st-streak').textContent = stats.streakDays;
@@ -2546,8 +2728,7 @@
 
             const freezeDesc = document.getElementById('freeze-slots-desc');
             if (freezeDesc) {
-                freezeDesc.textContent =
-                    `Protect your streak if you miss a day. Max: 2. (Owned: ${stats.xpFreezes || 0})`;
+                freezeDesc.textContent = `Protect your streak if you miss a day. Max: 2. (Owned: ${stats.xpFreezes || 0})`;
             }
 
             const doubleXpDesc = document.getElementById('double-xp-desc');
@@ -2564,8 +2745,12 @@
 
             const hintTokenDesc = document.getElementById('hint-token-desc');
             if (hintTokenDesc) {
-                hintTokenDesc.textContent =
-                `Reveals one incorrect option in MCQs. (Owned: ${stats.hintTokens || 0})`;
+                hintTokenDesc.textContent = `Reveals one incorrect option in MCQs. (Owned: ${stats.hintTokens || 0})`;
+            }
+
+            const timefreezeDesc = document.getElementById('timefreeze-desc');
+            if (timefreezeDesc) {
+                timefreezeDesc.textContent = `Pause timer once per question. (Owned: ${stats.timeFreezes || 0})`;
             }
 
             const themeDesc = document.getElementById('cyberpunk-theme-desc');
@@ -2600,6 +2785,21 @@
             const goalFill = document.getElementById('daily-xp-goal-fill');
             if (goalFill) goalFill.style.width = Math.min(100, (todayXp / 50) * 100) + '%';
 
+            // Daily challenge
+            const chBox = document.getElementById('daily-challenge-box');
+            if (stats.dailyChallenge) {
+                const ch = stats.dailyChallenge;
+                chBox.innerHTML = `<div>🎯 ${ch.desc} (${ch.progress || 0}/${ch.goal}) ${ch.completed ? '✅' : ''}</div>`;
+            } else chBox.innerHTML = '—';
+
+            // Achievements
+            const achBox = document.getElementById('achievements-box');
+            achBox.innerHTML = '';
+            for (const [key, ach] of Object.entries(ACHIEVEMENTS)) {
+                const earned = stats.achievements?.[key] || false;
+                achBox.innerHTML += `<span style="font-size:1.5rem; filter:${earned ? 'grayscale(0)' : 'grayscale(1)'}; opacity:${earned ? 1 : 0.3};" title="${ach.name}: ${ach.desc}">${ach.icon}</span>`;
+            }
+
             renderHeatmap(stats.dailyActivity || {});
             renderRetentionChart();
 
@@ -2633,11 +2833,10 @@
 
             if (!Object.keys(decks).length && !Object.keys(notes).length) {
                 grid.innerHTML = `
-              <div class="empty-state">
-                <div class="big" style="font-size:2.5rem; margin-bottom:8px;">📭</div>
-                <p>No study decks or flashcards loaded yet. Import JSON files in the Library tab.</p>
-              </div>
-            `;
+                <div class="empty-state">
+                    <div class="big" style="font-size:2.5rem; margin-bottom:8px;">📭</div>
+                    <p>No study decks or flashcards loaded yet. Import JSON files in the Library tab.</p>
+                </div>`;
                 return;
             }
 
@@ -2646,14 +2845,13 @@
                 card.className = 'deck-card type-mcq';
                 card.onclick = () => startStudy(name, 'mcq');
                 card.innerHTML = `
-              <div class="deck-card-icon mcq">🃏</div>
-              <div class="deck-card-name">${esc(name)}</div>
-              <div class="deck-card-meta">${cnt} MCQ cards</div>
-              <div class="deck-card-footer">
-                <span class="deck-type-pill mcq">MCQ</span>
-                <span style="font-size:0.68rem; color:var(--text-3);">→ Study</span>
-              </div>
-            `;
+                <div class="deck-card-icon mcq">🃏</div>
+                <div class="deck-card-name">${esc(name)}</div>
+                <div class="deck-card-meta">${cnt} MCQ cards</div>
+                <div class="deck-card-footer">
+                    <span class="deck-type-pill mcq">MCQ</span>
+                    <span style="font-size:0.68rem; color:var(--text-3);">→ Study</span>
+                </div>`;
                 grid.appendChild(card);
             }
 
@@ -2662,14 +2860,13 @@
                 card.className = 'deck-card type-flash';
                 card.onclick = () => startStudy(name, 'flashcard');
                 card.innerHTML = `
-              <div class="deck-card-icon flash">🎴</div>
-              <div class="deck-card-name">${esc(name)}</div>
-              <div class="deck-card-meta">${cnt} flashcards</div>
-              <div class="deck-card-footer">
-                <span class="deck-type-pill flash">Flashcard</span>
-                <span style="font-size:0.68rem; color:var(--text-3);">→ Study</span>
-              </div>
-            `;
+                <div class="deck-card-icon flash">🎴</div>
+                <div class="deck-card-name">${esc(name)}</div>
+                <div class="deck-card-meta">${cnt} flashcards</div>
+                <div class="deck-card-footer">
+                    <span class="deck-type-pill flash">Flashcard</span>
+                    <span style="font-size:0.68rem; color:var(--text-3);">→ Study</span>
+                </div>`;
                 grid.appendChild(card);
             }
         }
@@ -2698,13 +2895,12 @@
             <div class="deck-card-name">${esc(name)}</div>
             <div class="deck-card-meta">${cnt} cards</div>
             <div class="deck-card-footer">
-              <span class="deck-type-pill mcq">MCQ</span>
+                <span class="deck-type-pill mcq">MCQ</span>
             </div>
             <div class="deck-action-strip">
-              <button class="btn btn-ghost" onclick="event.stopPropagation(); openCardManager('${esc(name)}')">📋 Cards</button>
-              <button class="btn" style="background:var(--bad-dim); color:var(--bad);" onclick="event.stopPropagation(); deleteDeckUI('${esc(name)}')">🗑 Delete</button>
-            </div>
-          `;
+                <button class="btn btn-ghost" onclick="event.stopPropagation(); openCardManager('${esc(name)}')">📋 Cards</button>
+                <button class="btn" style="background:var(--bad-dim); color:var(--bad);" onclick="event.stopPropagation(); deleteDeckUI('${esc(name)}')">🗑 Delete</button>
+            </div>`;
             return div;
         }
 
@@ -2716,13 +2912,12 @@
             <div class="deck-card-name">${esc(name)}</div>
             <div class="deck-card-meta">${cnt} cards</div>
             <div class="deck-card-footer">
-              <span class="deck-type-pill flash">Flashcard</span>
+                <span class="deck-type-pill flash">Flashcard</span>
             </div>
             <div class="deck-action-strip">
-              <button class="btn btn-ghost" onclick="event.stopPropagation(); viewFlashcardCards('${esc(name)}')">📋 Cards</button>
-              <button class="btn" style="background:var(--bad-dim); color:var(--bad);" onclick="event.stopPropagation(); deleteNotesUI('${esc(name)}')">🗑 Delete</button>
-            </div>
-          `;
+                <button class="btn btn-ghost" onclick="event.stopPropagation(); viewFlashcardCards('${esc(name)}')">📋 Cards</button>
+                <button class="btn" style="background:var(--bad-dim); color:var(--bad);" onclick="event.stopPropagation(); deleteNotesUI('${esc(name)}')">🗑 Delete</button>
+            </div>`;
             return div;
         }
 
@@ -2748,13 +2943,12 @@
             overlay.className = 'modal-overlay';
             overlay.innerHTML = `
             <div class="modal-box">
-              <div class="modal-title" style="display:flex; justify-content:space-between; align-items:center; font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; margin-bottom:16px;">
-                <span>${esc(deckName)}</span>
-                <button class="modal-close" style="background:none; border:none; color:var(--text-3); font-size:1.3rem; cursor:pointer;">✕</button>
-              </div>
-              <div id="modal-card-list"></div>
-            </div>
-          `;
+                <div class="modal-title" style="display:flex; justify-content:space-between; align-items:center; font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; margin-bottom:16px;">
+                    <span>${esc(deckName)}</span>
+                    <button class="modal-close" style="background:none; border:none; color:var(--text-3); font-size:1.3rem; cursor:pointer;">✕</button>
+                </div>
+                <div id="modal-card-list"></div>
+            </div>`;
             document.body.appendChild(overlay);
 
             const listDiv = overlay.querySelector('#modal-card-list');
@@ -2766,12 +2960,11 @@
                     item.className = 'card-list-item';
                     item.style.padding = '12px 0';
                     item.innerHTML = `
-                <div class="card-list-q" style="flex:1; font-size:0.8rem; color:var(--text-2);">
-                  ${esc(card.question.substring(0, 80))}...
-                  <div class="card-list-ans" style="color:var(--good); font-size:0.75rem; margin-top:2px;">✔ ${esc(card['option' + card.correct])}</div>
-                </div>
-                <button class="card-del" data-idx="${idx}" style="margin-left:10px;">🗑</button>
-              `;
+                    <div class="card-list-q" style="flex:1; font-size:0.8rem; color:var(--text-2);">
+                        ${esc(card.question.substring(0, 80))}...
+                        <div class="card-list-ans" style="color:var(--good); font-size:0.75rem; margin-top:2px;">✔ ${esc(card['option' + card.correct])}</div>
+                    </div>
+                    <button class="card-del" data-idx="${idx}" style="margin-left:10px;">🗑</button>`;
                     item.querySelector('.card-del').addEventListener('click', async () => {
                         if (confirm('Delete this card?')) {
                             const newCards = [...curCards];
@@ -2800,13 +2993,12 @@
             overlay.className = 'modal-overlay';
             overlay.innerHTML = `
             <div class="modal-box">
-              <div class="modal-title" style="display:flex; justify-content:space-between; align-items:center; font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; margin-bottom:16px;">
-                <span>${esc(deckName)}</span>
-                <button class="modal-close" style="background:none; border:none; color:var(--text-3); font-size:1.3rem; cursor:pointer;">✕</button>
-              </div>
-              <div id="modal-flashcard-list"></div>
-            </div>
-          `;
+                <div class="modal-title" style="display:flex; justify-content:space-between; align-items:center; font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; margin-bottom:16px;">
+                    <span>${esc(deckName)}</span>
+                    <button class="modal-close" style="background:none; border:none; color:var(--text-3); font-size:1.3rem; cursor:pointer;">✕</button>
+                </div>
+                <div id="modal-flashcard-list"></div>
+            </div>`;
             document.body.appendChild(overlay);
 
             const listDiv = overlay.querySelector('#modal-flashcard-list');
@@ -2820,12 +3012,11 @@
                     item.className = 'card-list-item';
                     item.style.padding = '12px 0';
                     item.innerHTML = `
-                <div style="flex:1; font-size:0.8rem; color:var(--text-2);">
-                  <div style="font-weight:600; color:var(--text); margin-bottom:2px;">${esc(front.substring(0, 80))}${front.length > 80 ? '...' : ''}</div>
-                  <div style="color:var(--text-3); font-size:0.72rem;">${esc(back.substring(0, 100))}${back.length > 100 ? '...' : ''}</div>
-                </div>
-                <button class="card-del" data-idx="${idx}" style="margin-left:10px;">🗑</button>
-              `;
+                    <div style="flex:1; font-size:0.8rem; color:var(--text-2);">
+                        <div style="font-weight:600; color:var(--text); margin-bottom:2px;">${esc(front.substring(0, 80))}${front.length > 80 ? '...' : ''}</div>
+                        <div style="color:var(--text-3); font-size:0.72rem;">${esc(back.substring(0, 100))}${back.length > 100 ? '...' : ''}</div>
+                    </div>
+                    <button class="card-del" data-idx="${idx}" style="margin-left:10px;">🗑</button>`;
                     item.querySelector('.card-del').addEventListener('click', async () => {
                         if (confirm('Delete this flashcard?')) {
                             const newCards = [...curCards];
@@ -2857,8 +3048,7 @@
                 const data = JSON.parse(json);
                 if (!Array.isArray(data) || !data.length) throw new Error();
                 for (let i = 0; i < data.length; i++) {
-                    if (!data[i].question || !data[i].option1 || !data[i].option2 || !data[i].option3 || !data[i]
-                        .option4 || !data[i].correct) throw new Error();
+                    if (!data[i].question || !data[i].option1 || !data[i].option2 || !data[i].option3 || !data[i].option4 || !data[i].correct) throw new Error();
                 }
                 await saveDeck(name, data);
 
@@ -2908,8 +3098,7 @@
         };
 
         window.switchPanelTab = function(name) {
-            document.querySelectorAll('.panel-tab').forEach(t => t.classList.toggle('active', t.dataset.ptab ===
-                name));
+            document.querySelectorAll('.panel-tab').forEach(t => t.classList.toggle('active', t.dataset.ptab === name));
             document.getElementById('ptab-mcq').style.display = name === 'mcq' ? 'block' : 'none';
             document.getElementById('ptab-notes').style.display = name === 'notes' ? 'block' : 'none';
         };
@@ -3028,26 +3217,24 @@
 
             if (type === 'mcq') {
                 fieldsDiv.innerHTML = `
-              <input type="text" id="cc-question" placeholder="Question" class="form-input" style="margin-bottom:8px;">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
-                <input type="text" id="cc-opt1" placeholder="Option 1" class="form-input">
-                <input type="text" id="cc-opt2" placeholder="Option 2" class="form-input">
-                <input type="text" id="cc-opt3" placeholder="Option 3" class="form-input">
-                <input type="text" id="cc-opt4" placeholder="Option 4" class="form-input">
-              </div>
-              <select id="cc-correct" style="width:100%; margin-bottom:8px;">
-                <option value="1">Option 1 is correct</option>
-                <option value="2">Option 2 is correct</option>
-                <option value="3">Option 3 is correct</option>
-                <option value="4">Option 4 is correct</option>
-              </select>
-              <input type="text" id="cc-explanation" placeholder="Explanation (Optional)" class="form-input">
-            `;
+                <input type="text" id="cc-question" placeholder="Question" class="form-input" style="margin-bottom:8px;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                    <input type="text" id="cc-opt1" placeholder="Option 1" class="form-input">
+                    <input type="text" id="cc-opt2" placeholder="Option 2" class="form-input">
+                    <input type="text" id="cc-opt3" placeholder="Option 3" class="form-input">
+                    <input type="text" id="cc-opt4" placeholder="Option 4" class="form-input">
+                </div>
+                <select id="cc-correct" style="width:100%; margin-bottom:8px;">
+                    <option value="1">Option 1 is correct</option>
+                    <option value="2">Option 2 is correct</option>
+                    <option value="3">Option 3 is correct</option>
+                    <option value="4">Option 4 is correct</option>
+                </select>
+                <input type="text" id="cc-explanation" placeholder="Explanation (Optional)" class="form-input">`;
             } else {
                 fieldsDiv.innerHTML = `
-              <input type="text" id="cc-front" placeholder="Front (Question / Concept)" class="form-input" style="margin-bottom:8px;">
-              <textarea id="cc-back" placeholder="Back (Answer / Explanation)" rows="3" class="form-textarea"></textarea>
-            `;
+                <input type="text" id="cc-front" placeholder="Front (Question / Concept)" class="form-input" style="margin-bottom:8px;">
+                <textarea id="cc-back" placeholder="Back (Answer / Explanation)" rows="3" class="form-textarea"></textarea>`;
             }
         };
 
@@ -3087,8 +3274,7 @@
                 }
 
                 const cards = await getDeckCards(deckName);
-                const newCard = { question: q, option1: o1, option2: o2, option3: o3, option4: o4, correct,
-                    explanation };
+                const newCard = { question: q, option1: o1, option2: o2, option3: o3, option4: o4, correct, explanation };
                 cards.push(newCard);
                 await saveDeck(deckName, cards);
 
@@ -3204,8 +3390,7 @@
 
             for (let i = 5; i >= 0; i--) {
                 labels.push(weeksData[i].label);
-                const rate = weeksData[i].total > 0 ? Math.round((weeksData[i].correct / weeksData[i].total) * 100) :
-                    100;
+                const rate = weeksData[i].total > 0 ? Math.round((weeksData[i].correct / weeksData[i].total) * 100) : 100;
                 data.push(rate);
             }
 
@@ -3311,8 +3496,7 @@
 
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download =
-                        `recall_backup_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+                    a.download = `recall_backup_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -3329,8 +3513,7 @@
 
             function startBackupFeatures() {
                 const waitForDb = setInterval(() => {
-                    if (typeof db !== 'undefined' && db && typeof getAllDecks === 'function' && typeof toast ===
-                        'function') {
+                    if (typeof db !== 'undefined' && db && typeof getAllDecks === 'function' && typeof toast === 'function') {
                         clearInterval(waitForDb);
                         initBackupUI();
                         checkWeeklyReminder();
@@ -3350,9 +3533,8 @@
                 btnContainer.style.gap = '12px';
                 btnContainer.style.flexWrap = 'wrap';
                 btnContainer.innerHTML = `
-              <button id="recall-export-btn" class="btn btn-ghost btn-sm" style="border-color: var(--teal); color: var(--teal);">📦 Export All Data (Backup)</button>
-              <button id="recall-import-btn" class="btn btn-ghost btn-sm" style="border-color: var(--gold); color: var(--gold);">📂 Import Backup File</button>
-            `;
+                <button id="recall-export-btn" class="btn btn-ghost btn-sm" style="border-color: var(--teal); color: var(--teal);">📦 Export All Data (Backup)</button>
+                <button id="recall-import-btn" class="btn btn-ghost btn-sm" style="border-color: var(--gold); color: var(--gold);">📂 Import Backup File</button>`;
 
                 const refreshBtn = statsSection.querySelector('.btn-ghost');
                 if (refreshBtn && refreshBtn.parentNode) {
@@ -3369,8 +3551,7 @@
                     const decks = await getAllDecks();
                     const noteKeys = await getAllKeys('notes');
                     const stats = await getData('stats', 'main');
-                    const hasData = Object.keys(decks).length > 0 || noteKeys.length > 0 || (stats
-                        ?.totalAnswered || 0) > 0;
+                    const hasData = Object.keys(decks).length > 0 || noteKeys.length > 0 || (stats?.totalAnswered || 0) > 0;
 
                     if (hasData) {
                         const firstResult = await Swal.fire({
@@ -3402,8 +3583,7 @@
                             color: '#e8edf5',
                             preConfirm: (value) => {
                                 if (value !== 'IMPORT') {
-                                    Swal.showValidationMessage(
-                                        'You must type "IMPORT" exactly');
+                                    Swal.showValidationMessage('You must type "IMPORT" exactly');
                                     return false;
                                 }
                                 return true;
@@ -3434,9 +3614,7 @@
                         reader.onload = async (ev) => {
                             try {
                                 const data = JSON.parse(ev.target.result);
-                                if (!data.version || !data.decks || !data.notes || !data
-                                    .progress || !data.stats) throw new Error(
-                                    'Invalid backup file');
+                                if (!data.version || !data.decks || !data.notes || !data.progress || !data.stats) throw new Error('Invalid backup file');
 
                                 const stores = ['decks', 'notes', 'progress', 'stats'];
                                 for (const store of stores) {
@@ -3495,14 +3673,12 @@
                                 background: '#151b24',
                                 color: '#e8edf5',
                                 didRender: () => {
-                                    const goStatsLink = document.getElementById(
-                                        'reminder-go-stats');
+                                    const goStatsLink = document.getElementById('reminder-go-stats');
                                     if (goStatsLink) {
                                         goStatsLink.addEventListener('click', (e) => {
                                             e.preventDefault();
                                             Swal.close();
-                                            const statsTab = document.querySelector(
-                                                '.nav-tab[data-tab="stats"]');
+                                            const statsTab = document.querySelector('.nav-tab[data-tab="stats"]');
                                             if (statsTab) statsTab.click();
                                             toast('📊 Stats page opened', 1500);
                                         });
