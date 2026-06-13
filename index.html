@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Recall</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" href="icon1.png">
+    <link rel="apple-touch-icon" href="icon1.png">
     <meta name="theme-color" content="#080a0f">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -2056,6 +2057,8 @@
             clearAutoTimer();
             stopTimer();
             if (!currentDeck) return;
+
+            const statsObj = await initStats();
 
             const typeWrap = document.getElementById('prefs-type-answer-wrap');
             if (typeWrap) {
