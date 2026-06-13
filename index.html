@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -8,7 +9,9 @@
     <link rel="icon" type="image/png" href="icon1.png">
     <link rel="apple-touch-icon" href="icon1.png">
     <meta name="theme-color" content="#080a0f">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -72,6 +75,7 @@
             0% {
                 opacity: 0.5;
             }
+
             100% {
                 opacity: 1;
             }
@@ -253,6 +257,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -292,12 +297,15 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
+
         .deck-card.type-mcq::before {
             background: linear-gradient(90deg, #5b8af5, #7c3aed);
         }
+
         .deck-card.type-flash::before {
             background: linear-gradient(90deg, #3ecfbe, #10b981);
         }
+
         .deck-card::after {
             content: '';
             position: absolute;
@@ -308,6 +316,7 @@
             transition: opacity 0.25s;
             pointer-events: none;
         }
+
         .deck-card.type-flash::after {
             background: radial-gradient(ellipse at 50% 0%, rgba(62, 207, 190, 0.08) 0%, transparent 70%);
         }
@@ -318,9 +327,11 @@
             background: var(--s2);
             box-shadow: var(--shadow-elevated);
         }
+
         .deck-card:hover::before {
             opacity: 1;
         }
+
         .deck-card:hover::after {
             opacity: 1;
         }
@@ -336,9 +347,11 @@
             margin-bottom: 12px;
             flex-shrink: 0;
         }
+
         .deck-card-icon.mcq {
             background: rgba(91, 138, 245, 0.15);
         }
+
         .deck-card-icon.flash {
             background: rgba(62, 207, 190, 0.12);
         }
@@ -378,10 +391,12 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
+
         .deck-type-pill.mcq {
             background: rgba(91, 138, 245, 0.15);
             color: #7aa4f8;
         }
+
         .deck-type-pill.flash {
             background: rgba(62, 207, 190, 0.12);
             color: #3ecfbe;
@@ -392,6 +407,7 @@
             gap: 5px;
             margin-top: 12px;
         }
+
         .deck-action-strip .btn {
             flex: 1;
             padding: 5px 8px;
@@ -510,6 +526,7 @@
             0% {
                 box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
             }
+
             100% {
                 box-shadow: 0 0 0 6px rgba(74, 222, 128, 0);
             }
@@ -519,12 +536,15 @@
             0% {
                 transform: translateX(0);
             }
+
             25% {
                 transform: translateX(-3px);
             }
+
             75% {
                 transform: translateX(3px);
             }
+
             100% {
                 transform: translateX(0);
             }
@@ -641,6 +661,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -866,14 +887,17 @@
                 opacity: 0;
                 transform: translate(-50%, 20px) scale(0.8);
             }
+
             15% {
                 opacity: 1;
                 transform: translate(-50%, -10px) scale(1.1);
             }
+
             85% {
                 opacity: 1;
                 transform: translate(-50%, -25px) scale(1);
             }
+
             100% {
                 opacity: 0;
                 transform: translate(-50%, -45px) scale(0.8);
@@ -903,10 +927,12 @@
             color: #cd7f32;
             text-shadow: 0 0 5px rgba(205, 127, 50, 0.5);
         }
+
         .streak-silver {
             color: #b4b8c5;
             text-shadow: 0 0 8px rgba(180, 184, 197, 0.6);
         }
+
         .streak-gold {
             color: #fbbf24 !important;
             text-shadow: 0 0 12px rgba(251, 191, 36, 0.8);
@@ -918,6 +944,7 @@
                 transform: scale(1);
                 filter: brightness(1);
             }
+
             to {
                 transform: scale(1.08);
                 filter: brightness(1.2);
@@ -935,6 +962,7 @@
             transition: background 0.2s;
             color: var(--text-2);
         }
+
         .sound-toggle:hover {
             background: var(--s3);
         }
@@ -969,6 +997,7 @@
             transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
         }
+
         .form-input:focus,
         .form-textarea:focus,
         select:focus {
@@ -1005,6 +1034,7 @@
             transition: all 0.2s var(--ease);
             margin-bottom: 14px;
         }
+
         .drop-zone:hover,
         .drop-zone.dragging {
             border-color: var(--accent);
@@ -1022,6 +1052,7 @@
             margin-bottom: 24px;
             transition: border-color 0.2s;
         }
+
         .creator-panel:hover,
         .upload-panel:hover {
             border-color: var(--border-strong);
@@ -1037,9 +1068,11 @@
             gap: 2px;
             width: 100%;
         }
+
         .segmented-control input[type="radio"] {
             display: none;
         }
+
         .segmented-control label {
             flex: 1;
             text-align: center;
@@ -1051,6 +1084,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
+
         .segmented-control input[type="radio"]:checked+label {
             background: var(--s3);
             color: var(--text);
@@ -1120,29 +1154,36 @@
             #app {
                 padding: 16px 12px 60px;
             }
+
             .app-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
             }
+
             .header-pills {
                 width: 100%;
                 justify-content: flex-start;
             }
+
             .deck-grid {
                 grid-template-columns: 1fr;
             }
+
             .flashcard-wrapper {
                 height: 240px;
             }
+
             .flashcard-btn {
                 width: 54px;
                 height: 54px;
                 font-size: 1.3rem;
             }
+
             .flashcard-controls {
                 gap: 16px;
             }
+
             .xp-bar-wrap {
                 padding: 14px 16px;
                 gap: 10px;
@@ -1150,12 +1191,14 @@
         }
     </style>
 </head>
+
 <body>
     <div id="app">
         <header class="app-header">
             <div style="display:flex; align-items:center; gap:12px;">
                 <div class="wordmark">Recall<em>.</em></div>
-                <select id="theme-selector" onchange="changeTheme(this.value)" style="background:var(--s2); border:1px solid var(--border); border-radius:8px; padding:5px 10px; color:var(--text); font-size:0.75rem; font-family:'DM Sans',sans-serif; cursor:pointer; appearance:none; -webkit-appearance:none; background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27 viewBox=%270 0 10 6%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 stroke=%27%239ba8be%27 stroke-width=%271.5%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E'); background-repeat:no-repeat; background-position:right 8px center; padding-right:28px;">
+                <select id="theme-selector" onchange="changeTheme(this.value)"
+                    style="background:var(--s2); border:1px solid var(--border); border-radius:8px; padding:5px 10px; color:var(--text); font-size:0.75rem; font-family:'DM Sans',sans-serif; cursor:pointer; appearance:none; -webkit-appearance:none; background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27 viewBox=%270 0 10 6%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 stroke=%27%239ba8be%27 stroke-width=%271.5%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E'); background-repeat:no-repeat; background-position:right 8px center; padding-right:28px;">
                     <option value="default">🌌 Default</option>
                     <option value="cyberpunk" id="opt-theme-cyberpunk" disabled>🔒 Cyberpunk (500 XP)</option>
                 </select>
@@ -1202,16 +1245,20 @@
             <div id="study-session" style="display:none">
                 <div class="study-top">
                     <button class="btn btn-ghost btn-sm" onclick="exitStudy()">← Back</button>
-                    <div class="study-meta" id="study-meta-label" style="font-size:0.8rem; color:var(--text-2);">— due</div>
+                    <div class="study-meta" id="study-meta-label" style="font-size:0.8rem; color:var(--text-2);">— due
+                    </div>
                     <div style="display:flex; gap:8px; align-items:center;">
                         <span id="combo-indicator"></span>
-                        <label id="prefs-type-answer-wrap" style="display: none; align-items: center; gap: 6px; cursor: pointer; font-size: 0.75rem; color: var(--text-2);">
-                            <input type="checkbox" id="prefs-type-answer" style="accent-color: var(--teal);"> ✍️ Type Answer
+                        <label id="prefs-type-answer-wrap"
+                            style="display: none; align-items: center; gap: 6px; cursor: pointer; font-size: 0.75rem; color: var(--text-2);">
+                            <input type="checkbox" id="prefs-type-answer" style="accent-color: var(--teal);"> ✍️ Type
+                            Answer
                         </label>
                         <div class="timer-wrap">
                             <span id="timer-text">60s</span>
                         </div>
-                        <button id="session-delete-btn" class="btn-delete-session" title="Permanently remove this card">🗑 Remove card</button>
+                        <button id="session-delete-btn" class="btn-delete-session"
+                            title="Permanently remove this card">🗑 Remove card</button>
                     </div>
                 </div>
                 <div class="progress-bar-wrap">
@@ -1226,43 +1273,58 @@
             <div class="sec-title" style="font-size:1.1rem; margin-bottom:8px;">✏️ Quick Card Creator</div>
             <div class="creator-panel">
                 <div style="display:flex; gap:10px; margin-bottom:12px;">
-                    <select id="create-deck-select" onchange="onDeckSelectChanged()" style="flex:1;">
-                        <option value="">-- Select Deck or Create New --</option>
+                    <select id="create-deck-select" onchange="onDeckSelectChanged()">
+                        <option value="">Select Deck or Create New</option>
                     </select>
-                    <input type="text" id="new-deck-name" placeholder="Or new deck name" class="form-input" style="flex:1;">
+                    <input type="text" id="new-deck-name" placeholder="Or new deck name" class="form-input">
                 </div>
                 <div id="deck-type-selection" class="segmented-control" style="margin-bottom:12px;">
-                    <input type="radio" id="type-mcq" name="new-deck-type" value="mcq" checked onchange="onDeckSelectChanged()">
+                    <input type="radio" id="type-mcq" name="new-deck-type" value="mcq" checked
+                        onchange="onDeckSelectChanged()">
                     <label for="type-mcq">MCQ Deck</label>
 
-                    <input type="radio" id="type-flashcard" name="new-deck-type" value="flashcard" onchange="onDeckSelectChanged()">
+                    <input type="radio" id="type-flashcard" name="new-deck-type" value="flashcard"
+                        onchange="onDeckSelectChanged()">
                     <label for="type-flashcard">Flashcard Deck</label>
                 </div>
 
                 <div id="card-creator-fields" style="margin-top:10px;"></div>
-                <button class="btn btn-primary" onclick="addCardDirect()" style="margin-top:14px; width:100%; justify-content:center;">Add Card</button>
+                <button class="btn btn-primary" onclick="addCardDirect()"
+                    style="margin-top:14px; width:100%; justify-content:center;">Add Card</button>
             </div>
 
             <div class="upload-panel">
                 <div class="sec-title" style="margin-bottom:18px;">Import Content</div>
 
-                <div class="panel-tabs" style="display:flex; gap:8px; margin-bottom:18px; border-bottom:1px solid var(--border); padding-bottom:8px;">
-                    <button class="panel-tab btn btn-ghost btn-sm active" data-ptab="mcq" onclick="switchPanelTab('mcq')" style="border-radius: 8px;">MCQ Deck</button>
-                    <button class="panel-tab btn btn-ghost btn-sm" data-ptab="notes" onclick="switchPanelTab('notes')" style="border-radius: 8px;">Flashcard Deck</button>
+                <div class="panel-tabs"
+                    style="display:flex; gap:8px; margin-bottom:18px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+                    <button class="panel-tab btn btn-ghost btn-sm active" data-ptab="mcq"
+                        onclick="switchPanelTab('mcq')" style="border-radius: 8px;">MCQ Deck</button>
+                    <button class="panel-tab btn btn-ghost btn-sm" data-ptab="notes" onclick="switchPanelTab('notes')"
+                        style="border-radius: 8px;">Flashcard Deck</button>
                 </div>
 
                 <!-- MCQ tab -->
                 <div id="ptab-mcq">
                     <div class="drop-zone" id="drop-mcq">📂 Drop JSON file or click to select</div>
-                    <input type="text" class="form-input" id="deck-name-input" placeholder="Deck name" style="margin-bottom:10px;">
-                    <textarea class="form-textarea" id="deck-json-input" rows="4" placeholder='[{"question":"…","option1":"…","option2":"…","option3":"…","option4":"…","correct":1,"explanation":"…"}]' style="margin-bottom:14px; resize:vertical;"></textarea>
+                    <input type="text" class="form-input" id="deck-name-input" placeholder="Deck name"
+                        style="margin-bottom:10px;">
+                    <textarea class="form-textarea" id="deck-json-input" rows="4"
+                        placeholder='[{"question":"…","option1":"…","option2":"…","option3":"…","option4":"…","correct":1,"explanation":"…"}]'
+                        style="margin-bottom:14px; resize:vertical;"></textarea>
 
-                    <div style="margin-bottom: 16px; background: var(--s2); border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; color: var(--text-3); font-weight: 500;">📄 MCQ JSON template</span>
-                            <div id="copy-json-icon" style="cursor: pointer; font-size: 1.1rem; padding: 4px 8px; border-radius: 8px; background: var(--s3); transition: 0.1s;" title="Copy template">📋</div>
+                    <div
+                        style="margin-bottom: 16px; background: var(--s2); border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; color: var(--text-3); font-weight: 500;">📄 MCQ JSON
+                                template</span>
+                            <div id="copy-json-icon"
+                                style="cursor: pointer; font-size: 1.1rem; padding: 4px 8px; border-radius: 8px; background: var(--s3); transition: 0.1s;"
+                                title="Copy template">📋</div>
                         </div>
-                        <pre id="json-template-preview" style="background: var(--s1); padding: 12px; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-2); overflow-x: auto; white-space: pre-wrap; margin: 0;">[
+                        <pre id="json-template-preview"
+                            style="background: var(--s1); padding: 12px; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-2); overflow-x: auto; white-space: pre-wrap; margin: 0;">[
   {
     "question": "What is the capital of France?",
     "option1": "Berlin",
@@ -1281,15 +1343,24 @@
                 <!-- Flashcard tab -->
                 <div id="ptab-notes" style="display:none">
                     <div class="drop-zone" id="drop-notes">📂 Drop JSON file or click to select</div>
-                    <input type="text" class="form-input" id="notes-name-input" placeholder="Collection name" style="margin-bottom:10px;">
-                    <textarea class="form-textarea" id="notes-json-input" rows="4" placeholder='[{"front":"…","back":"…"}]' style="margin-bottom:14px; resize:vertical;"></textarea>
+                    <input type="text" class="form-input" id="notes-name-input" placeholder="Collection name"
+                        style="margin-bottom:10px;">
+                    <textarea class="form-textarea" id="notes-json-input" rows="4"
+                        placeholder='[{"front":"…","back":"…"}]'
+                        style="margin-bottom:14px; resize:vertical;"></textarea>
 
-                    <div style="margin-bottom: 16px; background: var(--s2); border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-size: 0.75rem; color: var(--text-3); font-weight: 500;">📄 Flashcard JSON template</span>
-                            <div id="copy-flashcard-json-icon" style="cursor: pointer; font-size: 1.1rem; padding: 4px 8px; border-radius: 8px; background: var(--s3); transition: 0.1s;" title="Copy template">📋</div>
+                    <div
+                        style="margin-bottom: 16px; background: var(--s2); border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.75rem; color: var(--text-3); font-weight: 500;">📄 Flashcard JSON
+                                template</span>
+                            <div id="copy-flashcard-json-icon"
+                                style="cursor: pointer; font-size: 1.1rem; padding: 4px 8px; border-radius: 8px; background: var(--s3); transition: 0.1s;"
+                                title="Copy template">📋</div>
                         </div>
-                        <pre id="flashcard-json-template-preview" style="background: var(--s1); padding: 12px; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-2); overflow-x: auto; white-space: pre-wrap; margin: 0;">[
+                        <pre id="flashcard-json-template-preview"
+                            style="background: var(--s1); padding: 12px; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text-2); overflow-x: auto; white-space: pre-wrap; margin: 0;">[
   {
     "front": "What is Photosynthesis?",
     "back": "The process by which green plants make food using sunlight, carbon dioxide, and water."
@@ -1313,10 +1384,22 @@
         <!-- Stats Section -->
         <div class="section" id="sec-stats">
             <div class="stats-grid">
-                <div class="stat-box"><div class="stat-val" id="st-total">—</div><div class="stat-lbl">Cards Answered</div></div>
-                <div class="stat-box"><div class="stat-val" id="st-acc">—</div><div class="stat-lbl">Accuracy</div></div>
-                <div class="stat-box"><div class="stat-val" id="st-streak">—</div><div class="stat-lbl">Day Streak 🔥</div></div>
-                <div class="stat-box"><div class="stat-val" id="st-xp">—</div><div class="stat-lbl">Total XP</div></div>
+                <div class="stat-box">
+                    <div class="stat-val" id="st-total">—</div>
+                    <div class="stat-lbl">Cards Answered</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="st-acc">—</div>
+                    <div class="stat-lbl">Accuracy</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="st-streak">—</div>
+                    <div class="stat-lbl">Day Streak 🔥</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-val" id="st-xp">—</div>
+                    <div class="stat-lbl">Total XP</div>
+                </div>
             </div>
             <div class="stat-box" style="margin-bottom: 20px;">
                 <div class="stat-lbl">Storage Used</div>
@@ -1330,7 +1413,8 @@
             <div class="stat-box" style="margin-bottom: 20px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <span class="stat-lbl" style="font-weight:600;">Daily XP Goal (50 XP)</span>
-                    <span id="daily-xp-goal-txt" style="font-size:0.8rem; font-weight:700; color:var(--teal);">0 / 50 XP</span>
+                    <span id="daily-xp-goal-txt" style="font-size:0.8rem; font-weight:700; color:var(--teal);">0 / 50
+                        XP</span>
                 </div>
                 <div class="storage-bar" style="height:8px; background:var(--s3);">
                     <div id="daily-xp-goal-fill" class="storage-fill" style="width:0%; background:var(--teal);"></div>
@@ -1352,52 +1436,66 @@
             <!-- Heatmap Grid -->
             <div class="stat-box" style="margin-bottom: 20px;">
                 <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">Activity Heatmap (Last 12 Weeks)</div>
-                <div id="heatmap-grid" style="display: flex; gap: 4px; overflow-x: auto; padding: 4px; justify-content: space-between;"></div>
+                <div id="heatmap-grid"
+                    style="display: flex; gap: 4px; overflow-x: auto; padding: 4px; justify-content: space-between;">
+                </div>
             </div>
 
             <div class="divider"></div>
             <div class="sec-title" style="font-size: 1rem; margin-bottom: 12px;">XP Rewards Store</div>
 
             <!-- Streak Freeze -->
-            <div style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div
+                style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <div>
                     <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">❄️ Streak Freeze Shield</div>
-                    <div style="font-size: 0.75rem; color: var(--text-3);" id="freeze-slots-desc">Protect your streak if you miss a day. Max: 2. (Owned: 0)</div>
+                    <div style="font-size: 0.75rem; color: var(--text-3);" id="freeze-slots-desc">Protect your streak if
+                        you miss a day. Max: 2. (Owned: 0)</div>
                 </div>
-                <button class="btn btn-ghost" onclick="buyStreakFreeze()" style="border-color: var(--teal); color: var(--teal);">
+                <button class="btn btn-ghost" onclick="buyStreakFreeze()"
+                    style="border-color: var(--teal); color: var(--teal);">
                     🛡️ 350 XP
                 </button>
             </div>
 
             <!-- Double XP Potion -->
-            <div style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div
+                style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <div>
                     <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">⚡ Double XP Potion (30m)</div>
-                    <div style="font-size: 0.75rem; color: var(--text-3);" id="double-xp-desc">Get 2x XP on reviews. (Status: Inactive)</div>
+                    <div style="font-size: 0.75rem; color: var(--text-3);" id="double-xp-desc">Get 2x XP on reviews.
+                        (Status: Inactive)</div>
                 </div>
-                <button class="btn btn-ghost" onclick="buyDoubleXp()" style="border-color: var(--teal); color: var(--teal);">
+                <button class="btn btn-ghost" onclick="buyDoubleXp()"
+                    style="border-color: var(--teal); color: var(--teal);">
                     🧪 200 XP
                 </button>
             </div>
 
             <!-- Hint Token -->
-            <div style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div
+                style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                 <div>
                     <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">💡 MCQ Hint Token</div>
-                    <div style="font-size: 0.75rem; color: var(--text-3);" id="hint-token-desc">Reveals one incorrect option in MCQs. (Owned: 0)</div>
+                    <div style="font-size: 0.75rem; color: var(--text-3);" id="hint-token-desc">Reveals one incorrect
+                        option in MCQs. (Owned: 0)</div>
                 </div>
-                <button class="btn btn-ghost" onclick="buyHintToken()" style="border-color: var(--teal); color: var(--teal);">
+                <button class="btn btn-ghost" onclick="buyHintToken()"
+                    style="border-color: var(--teal); color: var(--teal);">
                     🪙 100 XP
                 </button>
             </div>
 
             <!-- Cyberpunk Theme Unlock -->
-            <div style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <div
+                style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
                 <div>
                     <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">🎨 Cyberpunk Neon Theme</div>
-                    <div style="font-size: 0.75rem; color: var(--text-3);" id="cyberpunk-theme-desc">Unlock a futuristic neon aesthetic.</div>
+                    <div style="font-size: 0.75rem; color: var(--text-3);" id="cyberpunk-theme-desc">Unlock a futuristic
+                        neon aesthetic.</div>
                 </div>
-                <button class="btn btn-ghost" id="cyberpunk-theme-btn" onclick="buyCyberpunkTheme()" style="border-color: var(--teal); color: var(--teal);">
+                <button class="btn btn-ghost" id="cyberpunk-theme-btn" onclick="buyCyberpunkTheme()"
+                    style="border-color: var(--teal); color: var(--teal);">
                     🕶️ 500 XP
                 </button>
             </div>
@@ -1726,7 +1824,7 @@
             return stats;
         }
 
-        window.updateHeaderPills = function(stats) {
+        window.updateHeaderPills = function (stats) {
             const acc = stats.totalAnswered ? Math.round(stats.totalCorrect / stats.totalAnswered * 100 * 10) / 10 : 0;
             document.getElementById('h-xp').textContent = stats.xp;
             document.getElementById('h-acc').textContent = acc + '%';
@@ -1936,7 +2034,7 @@
         }
         window.buyCyberpunkTheme = buyCyberpunkTheme;
 
-        window.changeTheme = function(theme) {
+        window.changeTheme = function (theme) {
             document.body.className = '';
             if (theme === 'cyberpunk') {
                 document.body.classList.add('theme-cyberpunk-neon');
@@ -2026,7 +2124,7 @@
             }
         }
 
-        window.deleteCurrentCard = async function() {
+        window.deleteCurrentCard = async function () {
             if (!currentDeck || !currentCard) return toast("No active card");
             if (!confirm("Permanently remove this card? It won't appear again.")) return;
             clearAutoTimer();
@@ -2053,7 +2151,7 @@
             }
         };
 
-        window.loadNextCard = async function() {
+        window.loadNextCard = async function () {
             clearAutoTimer();
             stopTimer();
             if (!currentDeck) return;
@@ -2237,12 +2335,12 @@
             }
         }
 
-        window.chooseAnswer = function(chosen) {
+        window.chooseAnswer = function (chosen) {
             stopTimer();
             submitAnswer(chosen, Math.round((Date.now() - startTs) / 1000));
         };
 
-        window.useHintToken = async function() {
+        window.useHintToken = async function () {
             let stats = await initStats();
             if (!stats.hintTokens || stats.hintTokens <= 0) return toast("No hint tokens left!");
             if (!currentCard || currentDeckType !== 'mcq') return;
@@ -2277,7 +2375,7 @@
             toast("💡 Distractor eliminated!");
         };
 
-        window.flipFlashcard = function() {
+        window.flipFlashcard = function () {
             const card = document.getElementById('flashcard-element');
             if (!card) return;
             SoundManager.playFlip();
@@ -2407,7 +2505,7 @@
             nb.innerHTML = `<button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="clearTimeout(autoAdvanceTimer); advanceStudySession()">Continue →</button>`;
         }
 
-        window.finalizeFlashcard = function(button) {
+        window.finalizeFlashcard = function (button) {
             const elapsed = Math.round((Date.now() - startTs) / 1000);
             window._currentGradeContext = {
                 idx: currentCard.idx,
@@ -2459,7 +2557,7 @@
         }
         window.finalizeGrade = finalizeGrade;
 
-        window.advanceStudySession = function() {
+        window.advanceStudySession = function () {
             if (window._isCram) {
                 showCramCard();
             } else {
@@ -2597,7 +2695,7 @@
             startTs = Date.now();
         }
 
-        window.exitStudy = function() {
+        window.exitStudy = function () {
             clearAutoTimer();
             stopTimer();
             currentDeck = null;
@@ -2989,7 +3087,7 @@
         }
         window.viewFlashcardCards = viewFlashcardCards;
 
-        window.uploadDeck = async function() {
+        window.uploadDeck = async function () {
             const name = document.getElementById('deck-name-input').value.trim();
             const json = document.getElementById('deck-json-input').value.trim();
             if (!name || !json) return toast('Name + JSON required');
@@ -3015,7 +3113,7 @@
             }
         };
 
-        window.uploadNotes = async function() {
+        window.uploadNotes = async function () {
             const name = document.getElementById('notes-name-input').value.trim();
             const json = document.getElementById('notes-json-input').value.trim();
             if (!name || !json) return toast('Name + JSON required');
@@ -3046,7 +3144,7 @@
             }
         };
 
-        window.switchPanelTab = function(name) {
+        window.switchPanelTab = function (name) {
             document.querySelectorAll('.panel-tab').forEach(t => t.classList.toggle('active', t.dataset.ptab === name));
             document.getElementById('ptab-mcq').style.display = name === 'mcq' ? 'block' : 'none';
             document.getElementById('ptab-notes').style.display = name === 'notes' ? 'block' : 'none';
@@ -3142,7 +3240,7 @@
         }
         window.populateCreatorDeckSelect = populateCreatorDeckSelect;
 
-        window.onDeckSelectChanged = function() {
+        window.onDeckSelectChanged = function () {
             const select = document.getElementById('create-deck-select');
             const typeSelection = document.getElementById('deck-type-selection');
             const fieldsDiv = document.getElementById('card-creator-fields');
@@ -3187,7 +3285,7 @@
             }
         };
 
-        window.addCardDirect = async function() {
+        window.addCardDirect = async function () {
             const select = document.getElementById('create-deck-select');
             const newDeckName = document.getElementById('new-deck-name').value.trim();
             let val = select.value;
@@ -3315,7 +3413,7 @@
 
     <script>
         // ========== EXPORT / IMPORT + WEEKLY REMINDER (SweetAlert2) ==========
-        (function() {
+        (function () {
             if (typeof Swal === 'undefined') {
                 const swalLink = document.createElement('link');
                 swalLink.rel = 'stylesheet';
@@ -3570,126 +3668,127 @@
         })();
     </script>
     <script>
-// ========== INDEPENDENT NOTIFICATION REMINDERS ==========
-(function() {
-  'use strict';
+        // ========== INDEPENDENT NOTIFICATION REMINDERS ==========
+        (function () {
+            'use strict';
 
-  // ---------- Permission & Service Worker ----------
-  async function requestPermission() {
-    if (!('Notification' in window)) return;
-    if (Notification.permission === 'default') {
-      await Notification.requestPermission();
-    }
-  }
+            // ---------- Permission & Service Worker ----------
+            async function requestPermission() {
+                if (!('Notification' in window)) return;
+                if (Notification.permission === 'default') {
+                    await Notification.requestPermission();
+                }
+            }
 
-  // ---------- Check if user studied today ----------
-  async function hasStudiedToday() {
-    try {
-      const db = await new Promise((res, rej) => {
-        const req = indexedDB.open('RecallEngine', 1);
-        req.onsuccess = () => res(req.result);
-        req.onerror = rej;
-      });
-      const tx = db.transaction('stats', 'readonly');
-      const store = tx.objectStore('stats');
-      const stats = await new Promise(res => {
-        const r = store.get('main');
-        r.onsuccess = () => res(r.result || {});
-      });
-      const today = new Date().toISOString().slice(0, 10);
-      const dailyAct = stats.dailyActivity || {};
-      return (dailyAct[today] || 0) > 0;
-    } catch {
-      return false;
-    }
-  }
+            // ---------- Check if user studied today ----------
+            async function hasStudiedToday() {
+                try {
+                    const db = await new Promise((res, rej) => {
+                        const req = indexedDB.open('RecallEngine', 1);
+                        req.onsuccess = () => res(req.result);
+                        req.onerror = rej;
+                    });
+                    const tx = db.transaction('stats', 'readonly');
+                    const store = tx.objectStore('stats');
+                    const stats = await new Promise(res => {
+                        const r = store.get('main');
+                        r.onsuccess = () => res(r.result || {});
+                    });
+                    const today = new Date().toISOString().slice(0, 10);
+                    const dailyAct = stats.dailyActivity || {};
+                    return (dailyAct[today] || 0) > 0;
+                } catch {
+                    return false;
+                }
+            }
 
-  // ---------- Send a beautiful notification ----------
-  function sendNotification(title, options = {}) {
-    if (Notification.permission !== 'granted') return;
+            // ---------- Send a beautiful notification ----------
+            function sendNotification(title, options = {}) {
+                if (Notification.permission !== 'granted') return;
 
-    const defaults = {
-      icon: 'icons/icon-192.png',         // must exist in your manifest
-      badge: 'icons/icon-72.png',         // Android monochrome icon
-      vibrate: [200, 100, 200],
-      tag: 'recall-reminder',             // replace, don't stack duplicates
-      requireInteraction: true,           // stay until user taps
-      actions: [
-        { action: 'study', title: '📚 Study Now' },
-        { action: 'close', title: '🔕 Dismiss' }
-      ],
-      data: { url: './' }
-    };
+                const defaults = {
+                    icon: 'icons/icon-192.png',         // must exist in your manifest
+                    badge: 'icons/icon-72.png',         // Android monochrome icon
+                    vibrate: [200, 100, 200],
+                    tag: 'recall-reminder',             // replace, don't stack duplicates
+                    requireInteraction: true,           // stay until user taps
+                    actions: [
+                        { action: 'study', title: '📚 Study Now' },
+                        { action: 'close', title: '🔕 Dismiss' }
+                    ],
+                    data: { url: './' }
+                };
 
-    const merged = { ...defaults, ...options };
-    return navigator.serviceWorker.ready.then(reg => {
-      reg.showNotification(title, merged);
-    });
-  }
+                const merged = { ...defaults, ...options };
+                return navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification(title, merged);
+                });
+            }
 
-  // ---------- Daily reminder at 8 PM ----------
-  function scheduleEveningReminder() {
-    const now = new Date();
-    const eightPM = new Date(now);
-    eightPM.setHours(20, 0, 0, 0);
+            // ---------- Daily reminder at 8 PM ----------
+            function scheduleEveningReminder() {
+                const now = new Date();
+                const eightPM = new Date(now);
+                eightPM.setHours(20, 0, 0, 0);
 
-    // If 8 PM already passed, schedule for tomorrow
-    if (now > eightPM) eightPM.setDate(eightPM.getDate() + 1);
+                // If 8 PM already passed, schedule for tomorrow
+                if (now > eightPM) eightPM.setDate(eightPM.getDate() + 1);
 
-    const msUntil = eightPM - now;
-    console.log('🔔 Daily reminder scheduled in', Math.round(msUntil/60000), 'minutes');
+                const msUntil = eightPM - now;
+                console.log('🔔 Daily reminder scheduled in', Math.round(msUntil / 60000), 'minutes');
 
-    setTimeout(async () => {
-      const studied = await hasStudiedToday();
-      if (!studied) {
-        sendNotification('⏰ Time to study!', {
-          body: 'You haven’t reviewed any cards today. Keep your streak alive!',
-          tag: 'daily-reminder',
-          requireInteraction: true
-        });
-      }
-      // Reschedule for next day
-      scheduleEveningReminder();
-    }, msUntil);
-  }
+                setTimeout(async () => {
+                    const studied = await hasStudiedToday();
+                    if (!studied) {
+                        sendNotification('⏰ Time to study!', {
+                            body: 'You haven’t reviewed any cards today. Keep your streak alive!',
+                            tag: 'daily-reminder',
+                            requireInteraction: true
+                        });
+                    }
+                    // Reschedule for next day
+                    scheduleEveningReminder();
+                }, msUntil);
+            }
 
-  // ---------- Session complete notification (called from your code) ----------
-  // We expose a global function so your app can call it after a session
-  window.sendStudyCompleteNotification = function(stats) {
-    if (!stats) return;
-    const todayXP = stats.dailyXp?.[new Date().toISOString().slice(0,10)]?.xp || 0;
-    const streak = stats.streakDays || 0;
+            // ---------- Session complete notification (called from your code) ----------
+            // We expose a global function so your app can call it after a session
+            window.sendStudyCompleteNotification = function (stats) {
+                if (!stats) return;
+                const todayXP = stats.dailyXp?.[new Date().toISOString().slice(0, 10)]?.xp || 0;
+                const streak = stats.streakDays || 0;
 
-    if (todayXP >= 50 && streak > 1) {
-      sendNotification('🔥 Study session complete!', {
-        body: `You earned ${todayXP} XP today. ${streak}‑day streak! Come back tomorrow.`,
-        tag: 'session-done',
-        requireInteraction: false
-      });
-    } else if (streak === 1) {
-      sendNotification('✅ First study session done!', {
-        body: `Great start! Keep the streak going tomorrow.`,
-        tag: 'session-done'
-      });
-    }
-  };
+                if (todayXP >= 50 && streak > 1) {
+                    sendNotification('🔥 Study session complete!', {
+                        body: `You earned ${todayXP} XP today. ${streak}‑day streak! Come back tomorrow.`,
+                        tag: 'session-done',
+                        requireInteraction: false
+                    });
+                } else if (streak === 1) {
+                    sendNotification('✅ First study session done!', {
+                        body: `Great start! Keep the streak going tomorrow.`,
+                        tag: 'session-done'
+                    });
+                }
+            };
 
-  // ---------- Notification click handling (in service worker) ----------
-  // See the service worker part below
+            // ---------- Notification click handling (in service worker) ----------
+            // See the service worker part below
 
-  // ---------- Initialize ----------
-  requestPermission().then(() => {
-    scheduleEveningReminder();
-  });
+            // ---------- Initialize ----------
+            requestPermission().then(() => {
+                scheduleEveningReminder();
+            });
 
-  // Also re‑check every time the page becomes visible (if user comes back)
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      requestPermission();
-    }
-  });
+            // Also re‑check every time the page becomes visible (if user comes back)
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    requestPermission();
+                }
+            });
 
-})();
-</script>
+        })();
+    </script>
 </body>
+
 </html>
