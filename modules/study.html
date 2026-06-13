@@ -797,6 +797,7 @@ async function renderStudyChapters() {
     for (const [name, ch] of Object.entries(chapters)) {
         const card = document.createElement('div');
         card.className = 'deck-card type-flash';
+        card.dataset.name = name;
         card.onclick = () => startChapterStudy(name);
         card.innerHTML = `
             <div class="deck-card-icon flash">📘</div>
@@ -805,8 +806,8 @@ async function renderStudyChapters() {
             <div class="deck-card-footer">
                 <span class="deck-type-pill flash">Chapter</span>
                 <div class="chapter-card-actions">
-                    <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openChapterManager(${JSON.stringify(name)})">Manage</button>
-                    <button class="btn btn-ghost btn-sm delete-btn" onclick="event.stopPropagation(); deleteChapterAndRefresh(${JSON.stringify(name)})">Delete</button>
+                    <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openChapterManager(this.closest('.deck-card').dataset.name)">Manage</button>
+                    <button class="btn btn-ghost btn-sm delete-btn" onclick="event.stopPropagation(); deleteChapterAndRefresh(this.closest('.deck-card').dataset.name)">Delete</button>
                 </div>
             </div>`;
         chapterGrid.appendChild(card);

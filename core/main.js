@@ -178,6 +178,90 @@ async function triggerAdvancedDopamineReward(isCorrect, durationSeconds, anchors
 window.changeTheme = function (theme) { document.body.className = ''; if (theme === 'cyberpunk') document.body.classList.add('theme-cyberpunk-neon'); localStorage.setItem('recall_user_theme', theme); toast(`Theme changed to ${theme === 'cyberpunk' ? 'CYBERPUNK NEON' : 'DEFAULT'}`); };
 (function () { const t = localStorage.getItem('recall_user_theme') || 'default'; if (t === 'cyberpunk') document.body.classList.add('theme-cyberpunk-neon'); })();
 
+const NOTIF_STORAGE_KEY = 'recall_notifications_enabled';
+const NOTIF_PROMPTED_KEY = 'recall_notification_prompted';
+const NOTIF_REMINDER_TAG = 'recall-reminder';
+window.getNotificationPreference = function () {
+    return localStorage.getItem(NOTIF_STORAGE_KEY) === 'true';
+};
+window.setNotificationPreference = function (enabled) {
+    localStorage.setItem(NOTIF_STORAGE_KEY, enabled ? 'true' : 'false');
+};
+window.updateNotificationUI = function () {
+    const statusEl = document.getElementById('notif-status-text');
+    const btn = document.getElementById('notif-request-btn');
+    if (!statusEl || !btn) return;
+    if (!('Notification' in window)) {
+        statusEl.textContent = 'Notifications are not supported in this browser.';
+        btn.style.display = 'none';
+        return;
+    }
+    const enabled = window.getNotificationPreference();
+    if (Notification.permission === 'granted' && enabled) {
+        statusEl.textContent = 'Reminders enabled. You may receive gentle study nudges.';
+        btn.textContent = 'Disable reminders';
+        btn.style.display = 'inline-flex';
+    } else if (Notification.permission === 'denied') {
+        statusEl.textContent = 'Notifications are blocked in browser settings.';
+        btn.textContent = 'Open browser settings';
+        btn.style.display = 'inline-flex';
+    } else {
+        statusEl.textContent = 'Reminders are off. Enable them for subtle study nudges.';
+        btn.textContent = 'Enable reminders';
+        btn.style.display = 'inline-flex';
+    }
+};
+window.requestNotificationPermission = async function () {
+    if (!('Notification' in window)) { toast('Notifications are not supported.'); return; }
+    if (Notification.permission === 'granted') {
+        window.setNotificationPreference(true);
+        window.updateNotificationUI();
+        toast('Notifications already allowed.');
+        return;
+    }
+    if (Notification.permission === 'denied') {
+        toast('Notifications are blocked. Change browser settings to allow them.');
+        return;
+    }
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+        window.setNotificationPreference(true);
+        toast('Reminder permission granted.');
+        window.scheduleReminderIfAllowed();
+    } else {
+        window.setNotificationPreference(false);
+        toast('Notification permission declined.');
+    }
+    window.updateNotificationUI();
+};
+window.scheduleReminderIfAllowed = function () {
+    if (!('Notification' in window) || Notification.permission !== 'granted' || !window.getNotificationPreference()) return;
+    const last = Number(localStorage.getItem('recall_last_notification') || 0);
+    const now = Date.now();
+    if (now - last < 4 * 60 * 60 * 1000) return;
+    window.showReminderNotification();
+    localStorage.setItem('recall_last_notification', String(now));
+};
+window.showReminderNotification = function () {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    const title = 'Recall reminder';
+    const body = 'Keep your streak strong — answer a few cards now to stay on track.';
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+        navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(title, { body, icon: 'icon1.png', tag: NOTIF_REMINDER_TAG, renotify: false });
+        }).catch(() => new Notification(title, { body, icon: 'icon1.png' }));
+    } else {
+        new Notification(title, { body, icon: 'icon1.png' });
+    }
+};
+window.maybeAskNotificationPermission = function (stats) {
+    if (!('Notification' in window) || Notification.permission !== 'default') return;
+    if (stats.totalAnswered < 5) return;
+    if (localStorage.getItem(NOTIF_PROMPTED_KEY)) return;
+    localStorage.setItem(NOTIF_PROMPTED_KEY, '1');
+    setTimeout(() => window.requestNotificationPermission(), 800);
+};
+
 window.loadStats = async function() {
     let stats = await initStats();
     window.updateHeaderPills(stats);
@@ -194,6 +278,9 @@ window.loadStats = async function() {
     if (typeof renderStatsSection === 'function') await renderStatsSection(stats);
     if (typeof renderStoreSection === 'function') await renderStoreSection(stats);
     if (typeof renderStudyChapters === 'function') await renderStudyChapters();
+    window.updateNotificationUI();
+    window.maybeAskNotificationPermission(stats);
+    if (Notification.permission === 'granted' && window.getNotificationPreference()) window.scheduleReminderIfAllowed();
 };
 
 // Sound toggle setup

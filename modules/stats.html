@@ -85,6 +85,11 @@
         <div id="daily-challenge-box" style="font-size:0.85rem; color:var(--text-2);"></div>
     </div>
     <div class="stat-box" style="margin-bottom:20px;">
+        <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">🔔 Study Reminders</div>
+        <div id="notif-status-text" style="font-size:0.85rem; color:var(--text-2); margin-bottom:10px;">Notifications are not enabled.</div>
+        <button class="btn btn-ghost btn-sm" id="notif-request-btn" onclick="requestNotificationPermission()">Enable reminders</button>
+    </div>
+    <div class="stat-box" style="margin-bottom:20px;">
         <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">🏆 Achievements</div>
         <div id="achievements-box" style="display:flex; flex-wrap:wrap; gap:8px; font-size:1.5rem;"></div>
     </div>
