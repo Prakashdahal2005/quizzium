@@ -1,0 +1,132 @@
+<style>
+.creator-panel,
+.upload-panel {
+    box-shadow: var(--shadow-card);
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl) !important;
+    padding: 24px !important;
+    margin-bottom: 24px;
+    transition: border-color 0.2s;
+}
+
+.creator-panel:hover,
+.upload-panel:hover {
+    border-color: var(--border-strong);
+}
+</style>
+
+<div class="section" id="sec-library">
+    <div class="creator-panel">
+        <div class="sec-title" style="margin-bottom:8px;">📘 Chapter Creator / Importer</div>
+        <div style="margin-bottom:12px;">
+            <textarea class="form-textarea" id="chapter-json" rows="8"
+                placeholder='Paste chapter JSON here (see template below)'></textarea>
+        </div>
+        <div class="drop-zone" id="drop-chapter">📂 Drop chapter JSON file here or click to upload</div>
+        <div
+            style="margin-bottom:16px; background:var(--s2); border:1px solid var(--border); border-radius:12px; padding:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:0.75rem; color:var(--text-3); font-weight:500;">📄 Chapter JSON
+                    template</span>
+                <div id="copy-chapter-json-icon"
+                    style="cursor:pointer; font-size:1.1rem; padding:4px 8px; border-radius:8px; background:var(--s3); transition:0.1s;"
+                    title="Copy template">📋</div>
+            </div>
+            <pre id="chapter-json-template-preview"
+                style="background:var(--s1); padding:12px; border-radius:10px; font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--text-2); overflow-x:auto; white-space:pre-wrap; margin:0;">{
+  "chapters": [
+    {
+      "chapter": "Digital Logic",
+      "flashcards": [
+        { "front": "What is a NAND gate?", "back": "A universal gate that outputs 0 only if all inputs are 1." }
+      ],
+      "mcqs": [
+        {
+          "question": "Which gate is universal?",
+          "option1": "AND", "option2": "OR",
+          "option3": "NAND", "option4": "XOR",
+          "correct": 3,
+          "explanation": "NAND can be used to create all other gates."
+        }
+      ]
+    }
+  ]
+}</pre>
+        </div>
+        <button class="btn btn-primary" onclick="uploadChapter()">⬆ Import / Save Chapter</button>
+    </div>
+</div>
+
+<script>
+function setupDrop(zoneId, jsonId, nameId) {
+    const zone = document.getElementById(zoneId);
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+    zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('dragging');
+        const file = e.dataTransfer.files[0];
+        if (file && file.name.endsWith('.json')) {
+            const reader = new FileReader();
+            reader.onload = ev => {
+                document.getElementById(jsonId).value = ev.target.result;
+                if (!document.getElementById(nameId).value) document.getElementById(nameId).value = file.name.replace('.json', '');
+            };
+            reader.readAsText(file);
+        } else toast('Drop .json files only');
+    });
+    zone.addEventListener('click', () => {
+        const inp = document.createElement('input');
+        inp.type = 'file';
+        inp.accept = '.json';
+        inp.onchange = e => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    document.getElementById(jsonId).value = ev.target.result;
+                    if (!document.getElementById(nameId).value) document.getElementById(nameId).value = file.name.replace('.json', '');
+                };
+                reader.readAsText(file);
+            }
+        };
+        inp.click();
+    });
+}
+
+setupDrop('drop-chapter', 'chapter-json');
+
+window.uploadChapter = async function () {
+    const json = document.getElementById('chapter-json').value.trim();
+    if (!json) return toast('JSON required');
+    try {
+        const data = JSON.parse(json);
+        let chapters = [];
+        if (Array.isArray(data)) chapters = data;
+        else if (data.chapters && Array.isArray(data.chapters)) chapters = data.chapters;
+        else if (data.chapter && data.flashcards && data.mcqs) chapters = [data];
+        else throw new Error('Invalid chapter format');
+        if (!chapters.length) throw new Error('No chapters found');
+        for (const chapter of chapters) {
+            if (!chapter.chapter || !Array.isArray(chapter.flashcards) || !Array.isArray(chapter.mcqs)) throw new Error('Invalid chapter item');
+            await saveChapter(chapter.chapter, {
+                chapter: chapter.chapter,
+                flashcards: chapter.flashcards,
+                mcqs: chapter.mcqs
+            });
+        }
+        toast(`Imported ${chapters.length} chapter${chapters.length === 1 ? '' : 's'}!`);
+        document.getElementById('chapter-json').value = '';
+        await loadStats();
+    } catch (e) {
+        toast('Invalid chapter JSON structure');
+    }
+};
+
+// Copy template button
+document.getElementById('copy-chapter-json-icon').addEventListener('click', () => {
+    const template = document.getElementById('chapter-json-template-preview').textContent;
+    navigator.clipboard.writeText(template).then(() => toast('📋 Template copied!'));
+});
+</script>

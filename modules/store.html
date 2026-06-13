@@ -1,0 +1,100 @@
+<script>
+async function renderStoreSection(stats) {
+    const container = document.getElementById('store-container');
+    if (!container) return;
+
+    const unlocked = stats.unlockedThemes || ['default'];
+    const freezeDesc = `Protect your streak if you miss a day. Max: 2. (Owned: ${stats.xpFreezes || 0})`;
+    const doubleXpDesc = stats.doubleXpExpiry && stats.doubleXpExpiry > Date.now()
+        ? `Get 2x XP on reviews. (Active: ${Math.ceil((stats.doubleXpExpiry - Date.now()) / 60000)}m remaining)`
+        : 'Get 2x XP on reviews. (Status: Inactive)';
+    const hintDesc = `Reveals one incorrect option in MCQs. (Owned: ${stats.hintTokens || 0})`;
+    const cyberpunkDesc = unlocked.includes('cyberpunk') ? 'Unlock a futuristic neon aesthetic. (Unlocked!)' : 'Unlock a futuristic neon aesthetic. (Locked)';
+
+    container.innerHTML = `
+        <div class="sec-title" style="font-size:1rem; margin-bottom:12px;">XP Rewards Store</div>
+        <div style="background:var(--s1); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+            <div>
+                <div style="font-weight:600; font-size:0.9rem; color:var(--text);">❄️ Streak Freeze Shield</div>
+                <div style="font-size:0.75rem; color:var(--text-3);">${freezeDesc}</div>
+            </div>
+            <button class="btn btn-ghost" onclick="buyStreakFreeze()" style="border-color:var(--teal); color:var(--teal);">🛡️ 350 XP</button>
+        </div>
+        <div style="background:var(--s1); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+            <div>
+                <div style="font-weight:600; font-size:0.9rem; color:var(--text);">⚡ Double XP Potion (30m)</div>
+                <div style="font-size:0.75rem; color:var(--text-3);" id="double-xp-desc">${doubleXpDesc}</div>
+            </div>
+            <button class="btn btn-ghost" onclick="buyDoubleXp()" style="border-color:var(--teal); color:var(--teal);">🧪 200 XP</button>
+        </div>
+        <div style="background:var(--s1); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+            <div>
+                <div style="font-weight:600; font-size:0.9rem; color:var(--text);">💡 MCQ Hint Token</div>
+                <div style="font-size:0.75rem; color:var(--text-3);">${hintDesc}</div>
+            </div>
+            <button class="btn btn-ghost" onclick="buyHintToken()" style="border-color:var(--teal); color:var(--teal);">🪙 100 XP</button>
+        </div>
+        <div style="background:var(--s1); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+            <div>
+                <div style="font-weight:600; font-size:0.9rem; color:var(--text);">🎨 Cyberpunk Neon Theme</div>
+                <div style="font-size:0.75rem; color:var(--text-3);">${cyberpunkDesc}</div>
+            </div>
+            <button class="btn btn-ghost" id="cyberpunk-theme-btn" onclick="buyCyberpunkTheme()" style="border-color:var(--teal); color:var(--teal);">🕶️ 500 XP</button>
+        </div>
+    `;
+
+    // Update dynamic text color for double XP
+    const doubleXpDescEl = document.getElementById('double-xp-desc');
+    if (stats.doubleXpExpiry && stats.doubleXpExpiry > Date.now()) {
+        doubleXpDescEl.style.color = 'var(--teal)';
+    }
+}
+
+async function buyStreakFreeze() {
+    let stats = await initStats();
+    if (!stats.xpFreezes) stats.xpFreezes = 0;
+    if (stats.xp < 350) { toast("❌ Insufficient XP"); return; }
+    if (stats.xpFreezes >= 2) { toast("🔒 Max shields"); return; }
+    stats.xp -= 350;
+    stats.xpFreezes += 1;
+    await setData('stats', 'main', stats);
+    toast(`🛡️ Streak Freeze locked! Stock: ${stats.xpFreezes}`);
+    await loadStats();
+}
+window.buyStreakFreeze = buyStreakFreeze;
+
+async function buyDoubleXp() {
+    let stats = await initStats();
+    if (stats.xp < 200) { toast("❌ Need 200 XP"); return; }
+    stats.xp -= 200;
+    stats.doubleXpExpiry = Date.now() + 30 * 60 * 1000;
+    await setData('stats', 'main', stats);
+    toast("🧪 Double XP Potion active 30m!");
+    await loadStats();
+}
+window.buyDoubleXp = buyDoubleXp;
+
+async function buyHintToken() {
+    let stats = await initStats();
+    if (stats.xp < 100) { toast("❌ Need 100 XP"); return; }
+    stats.xp -= 100;
+    stats.hintTokens = (stats.hintTokens || 0) + 1;
+    await setData('stats', 'main', stats);
+    toast("🪙 Hint Token purchased! Remaining: " + stats.hintTokens);
+    await loadStats();
+}
+window.buyHintToken = buyHintToken;
+
+async function buyCyberpunkTheme() {
+    let stats = await initStats();
+    if (!stats.unlockedThemes) stats.unlockedThemes = ['default'];
+    if (stats.unlockedThemes.includes('cyberpunk')) { toast("🎨 Theme already unlocked!"); return; }
+    if (stats.xp < 500) { toast("❌ Need 500 XP"); return; }
+    stats.xp -= 500;
+    stats.unlockedThemes.push('cyberpunk');
+    await setData('stats', 'main', stats);
+    toast("🎉 Cyberpunk Neon Theme Unlocked!");
+    await loadStats();
+}
+window.buyCyberpunkTheme = buyCyberpunkTheme;
+</script>

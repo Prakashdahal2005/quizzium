@@ -1,0 +1,178 @@
+<style>
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-box {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 20px 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.7rem;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.stat-lbl {
+    font-size: 0.72rem;
+    color: var(--text-3);
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.storage-bar {
+    height: 6px;
+    background: var(--s3);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.storage-fill {
+    height: 100%;
+    background: var(--good);
+    transition: width 0.4s var(--ease);
+    border-radius: 6px;
+}
+</style>
+
+<div class="section" id="sec-stats">
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-val" id="st-total">—</div>
+            <div class="stat-lbl">Cards Answered</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-val" id="st-acc">—</div>
+            <div class="stat-lbl">Accuracy</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-val" id="st-streak">—</div>
+            <div class="stat-lbl">Day Streak 🔥</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-val" id="st-xp">—</div>
+            <div class="stat-lbl">Total XP</div>
+        </div>
+    </div>
+    <div class="stat-box" style="margin-bottom:20px;">
+        <div class="stat-lbl">Storage Used</div>
+        <div class="storage-bar">
+            <div class="storage-fill" id="st-storage-fill"></div>
+        </div>
+        <div id="st-storage-txt" style="font-size:0.72rem; color:var(--text-3)"></div>
+    </div>
+    <div class="stat-box" style="margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span class="stat-lbl" style="font-weight:600;">Daily XP Goal (50 XP)</span>
+            <span id="daily-xp-goal-txt" style="font-size:0.8rem; font-weight:700; color:var(--teal);">0 / 50 XP</span>
+        </div>
+        <div class="storage-bar" style="height:8px; background:var(--s3);">
+            <div id="daily-xp-goal-fill" class="storage-fill" style="width:0%; background:var(--teal);"></div>
+        </div>
+    </div>
+    <div class="stat-box" style="margin-bottom:20px;">
+        <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">🎯 Daily Challenge</div>
+        <div id="daily-challenge-box" style="font-size:0.85rem; color:var(--text-2);"></div>
+    </div>
+    <div class="stat-box" style="margin-bottom:20px;">
+        <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">🏆 Achievements</div>
+        <div id="achievements-box" style="display:flex; flex-wrap:wrap; gap:8px; font-size:1.5rem;"></div>
+    </div>
+    <div class="stat-box" style="margin-bottom:20px;">
+        <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">Activity Heatmap (Last 12 Weeks)</div>
+        <div id="heatmap-grid"
+            style="display:flex; gap:4px; overflow-x:auto; padding:4px; justify-content:space-between;"></div>
+    </div>
+    <div class="divider"></div>
+    <div id="store-container"></div>
+    <button class="btn btn-ghost btn-sm" onclick="loadStats()">⟳ Refresh</button>
+</div>
+
+<script>
+const ACHIEVEMENTS = {
+    perfect5: { name: 'Perfect 5', desc: '5 correct in a row', icon: '🎯' },
+    perfect10: { name: 'Perfect 10', desc: '10 correct in a row', icon: '🔥' },
+    speed_demon: { name: 'Speed Demon', desc: 'Answer under 2s', icon: '⚡' },
+    night_owl: { name: 'Night Owl', desc: 'Study after 10 PM', icon: '🦉' },
+    collector: { name: 'Collector', desc: 'Create 5 decks', icon: '📚' },
+    centurion: { name: 'Centurion', desc: '100 cards answered', icon: '💯' },
+    xp_master: { name: 'XP Master', desc: 'Earn 1000 XP', icon: '🌟' },
+    streak7: { name: 'Week Warrior', desc: '7-day streak', icon: '📅' }
+};
+
+function renderHeatmap(dailyActivity) {
+    const grid = document.getElementById('heatmap-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const days = 84;
+    const now = new Date();
+    for (let w = 0; w < 12; w++) {
+        const weekCol = document.createElement('div');
+        weekCol.style.display = 'grid';
+        weekCol.style.gridTemplateRows = 'repeat(7, 1fr)';
+        weekCol.style.gap = '4px';
+        for (let d = 0; d < 7; d++) {
+            const dayIdx = w * 7 + d;
+            const date = new Date();
+            date.setDate(now.getDate() - (days - 1 - dayIdx));
+            const dateStr = date.toISOString().slice(0, 10);
+            const count = dailyActivity[dateStr] || 0;
+            const box = document.createElement('div');
+            box.style.width = '10px';
+            box.style.height = '10px';
+            box.style.borderRadius = '2px';
+            box.title = `${dateStr}: ${count} reviews`;
+            if (count === 0) box.style.background = 'var(--s3)';
+            else if (count < 5) box.style.background = 'rgba(62,207,190,0.3)';
+            else if (count < 15) box.style.background = 'rgba(62,207,190,0.6)';
+            else box.style.background = 'var(--teal)';
+            weekCol.appendChild(box);
+        }
+        grid.appendChild(weekCol);
+    }
+}
+
+async function renderStatsSection(stats) {
+    document.getElementById('st-total').textContent = stats.totalAnswered;
+    document.getElementById('st-acc').textContent = (stats.totalAnswered ? Math.round(stats.totalCorrect / stats.totalAnswered * 100 * 10) / 10 : '—') + '%';
+    document.getElementById('st-streak').textContent = stats.streakDays;
+    document.getElementById('st-xp').textContent = stats.xp;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const todayXp = stats.dailyXp?.[today]?.xp || 0;
+    document.getElementById('daily-xp-goal-txt').textContent = `${todayXp} / 50 XP`;
+    document.getElementById('daily-xp-goal-fill').style.width = Math.min(100, (todayXp / 50) * 100) + '%';
+
+    const chBox = document.getElementById('daily-challenge-box');
+    if (stats.dailyChallenge) {
+        const ch = stats.dailyChallenge;
+        chBox.innerHTML = `🎯 ${ch.desc} (${ch.progress || 0}/${ch.goal}) ${ch.completed ? '✅' : ''}`;
+    } else chBox.innerHTML = '—';
+
+    const achBox = document.getElementById('achievements-box');
+    achBox.innerHTML = '';
+    for (const [key, ach] of Object.entries(ACHIEVEMENTS)) {
+        const earned = stats.achievements?.[key] || false;
+        achBox.innerHTML += `<span style="filter:${earned ? 'grayscale(0)' : 'grayscale(1)'}; opacity:${earned ? 1 : 0.3};" title="${ach.name}: ${ach.desc}">${ach.icon}</span>`;
+    }
+
+    renderHeatmap(stats.dailyActivity || {});
+
+    const usage = await getStorageUsageMB();
+    const pct = Math.min(100, (usage / 100) * 100);
+    const fill = document.getElementById('st-storage-fill');
+    fill.style.width = pct + '%';
+    fill.style.background = pct > 80 ? 'var(--bad)' : pct > 60 ? 'var(--gold)' : 'var(--good)';
+    document.getElementById('st-storage-txt').textContent = usage.toFixed(2) + ' / 100 MB';
+}
+</script>
