@@ -1210,7 +1210,6 @@
                         <div class="timer-wrap">
                             <span id="timer-text">60s</span>
                         </div>
-                        <button id="timefreeze-btn" class="btn btn-ghost btn-sm" style="display:none; border-color:var(--teal); color:var(--teal);" onclick="useTimeFreeze()">❄️ Freeze</button>
                         <button id="session-delete-btn" class="btn-delete-session" title="Permanently remove this card">🗑 Remove card</button>
                     </div>
                 </div>
@@ -1355,14 +1354,6 @@
                 <div id="heatmap-grid" style="display: flex; gap: 4px; overflow-x: auto; padding: 4px; justify-content: space-between;"></div>
             </div>
 
-            <!-- Retention Chart Box -->
-            <div class="stat-box" style="margin-bottom: 20px;">
-                <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">Weekly Retention Rate</div>
-                <div style="position: relative; height: 180px; width: 100%;">
-                    <canvas id="retention-chart"></canvas>
-                </div>
-            </div>
-
             <div class="divider"></div>
             <div class="sec-title" style="font-size: 1rem; margin-bottom: 12px;">XP Rewards Store</div>
 
@@ -1396,17 +1387,6 @@
                 </div>
                 <button class="btn btn-ghost" onclick="buyHintToken()" style="border-color: var(--teal); color: var(--teal);">
                     🪙 100 XP
-                </button>
-            </div>
-
-            <!-- Time Freeze -->
-            <div style="background: var(--s1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                <div>
-                    <div style="font-weight: 600; font-size: 0.9rem; color: var(--text);">⏳ Time Freeze (10s)</div>
-                    <div style="font-size: 0.75rem; color: var(--text-3);" id="timefreeze-desc">Pause timer once per question. (Owned: 0)</div>
-                </div>
-                <button class="btn btn-ghost" onclick="buyTimeFreeze()" style="border-color: var(--teal); color: var(--teal);">
-                    ⏱️ 150 XP
                 </button>
             </div>
 
@@ -1641,14 +1621,12 @@
                     currentTheme: 'default',
                     dailyActivity: {},
                     retentionLogs: [],
-                    timeFreezes: 0,
                     achievements: {},
                     dailyChallenge: null
                 };
                 await setData('stats', 'main', stats);
             }
             if (stats.xpFreezes === undefined) stats.xpFreezes = 0;
-            if (stats.timeFreezes === undefined) stats.timeFreezes = 0;
             if (!stats.dailyXp) stats.dailyXp = {};
             if (!stats.unlockedThemes) stats.unlockedThemes = ['default'];
             if (!stats.dailyActivity) stats.dailyActivity = {};
@@ -1935,28 +1913,6 @@
         }
         window.buyHintToken = buyHintToken;
 
-        async function buyTimeFreeze() {
-            let stats = await initStats();
-            if (stats.xp < 150) return toast("❌ Need 150 XP");
-            stats.xp -= 150;
-            stats.timeFreezes = (stats.timeFreezes || 0) + 1;
-            await setData('stats', 'main', stats);
-            toast("⏳ Time Freeze acquired! You have " + stats.timeFreezes);
-            loadStats();
-        }
-        window.buyTimeFreeze = buyTimeFreeze;
-
-        window.useTimeFreeze = async function() {
-            let stats = await initStats();
-            if (!stats.timeFreezes || stats.timeFreezes <= 0) return toast("No Time Freezes left");
-            stats.timeFreezes--;
-            await setData('stats', 'main', stats);
-            timerSeconds += 10;
-            document.getElementById('timer-text').textContent = timerSeconds + 's';
-            document.getElementById('timefreeze-btn').style.display = 'none';
-            toast("⏳ +10 seconds added to timer");
-            loadStats();
-        };
 
         async function buyCyberpunkTheme() {
             let stats = await initStats();
@@ -2143,10 +2099,6 @@
                 `${due.length} due · ${cards.length} total`;
             document.getElementById('study-progress').style.width = ((1 - due.length / cards.length) * 100) + '%';
 
-            // Show time freeze button if user has tokens
-            const statsObj = await initStats();
-            const tfBtn = document.getElementById('timefreeze-btn');
-            if (tfBtn) tfBtn.style.display = (statsObj.timeFreezes > 0) ? 'inline-flex' : 'none';
 
             if (currentDeckType === 'flashcard') {
                 const question = card.topic || card.question || card.front || card.concept || 'No front content';
@@ -2748,11 +2700,6 @@
                 hintTokenDesc.textContent = `Reveals one incorrect option in MCQs. (Owned: ${stats.hintTokens || 0})`;
             }
 
-            const timefreezeDesc = document.getElementById('timefreeze-desc');
-            if (timefreezeDesc) {
-                timefreezeDesc.textContent = `Pause timer once per question. (Owned: ${stats.timeFreezes || 0})`;
-            }
-
             const themeDesc = document.getElementById('cyberpunk-theme-desc');
             const unlocked = stats.unlockedThemes || ['default'];
             if (themeDesc) {
@@ -2801,7 +2748,6 @@
             }
 
             renderHeatmap(stats.dailyActivity || {});
-            renderRetentionChart();
 
             const usage = await getStorageUsageMB();
             const pct = Math.min(100, (usage / 100) * 100);
@@ -3356,83 +3302,6 @@
             }
         }
 
-        // ---------- Retention Chart Logic ----------
-        let retentionChartInstance = null;
-        async function renderRetentionChart() {
-            const canvas = document.getElementById('retention-chart');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
-
-            const stats = await initStats();
-            const logs = stats.retentionLogs || [];
-
-            const weeksData = {};
-            const now = Date.now();
-            const oneWeek = 7 * 24 * 60 * 60 * 1000;
-
-            for (let i = 5; i >= 0; i--) {
-                const start = now - (i + 1) * oneWeek;
-                const end = now - i * oneWeek;
-                weeksData[i] = { correct: 0, total: 0, label: `W-${i}` };
-
-                logs.forEach(log => {
-                    const time = new Date(log.date).getTime();
-                    if (time >= start && time < end) {
-                        weeksData[i].total++;
-                        if (log.correct) weeksData[i].correct++;
-                    }
-                });
-            }
-
-            const labels = [];
-            const data = [];
-
-            for (let i = 5; i >= 0; i--) {
-                labels.push(weeksData[i].label);
-                const rate = weeksData[i].total > 0 ? Math.round((weeksData[i].correct / weeksData[i].total) * 100) : 100;
-                data.push(rate);
-            }
-
-            if (retentionChartInstance) {
-                retentionChartInstance.destroy();
-            }
-
-            retentionChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Retention %',
-                        data: data,
-                        borderColor: '#3ecfbe',
-                        backgroundColor: 'rgba(62, 207, 190, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 100,
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#9ba8be' }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#9ba8be' }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
-        }
 
         loadStats();
 
@@ -3697,5 +3566,127 @@
             if (typeof Swal !== 'undefined') startBackupFeatures();
         })();
     </script>
+    <script>
+// ========== INDEPENDENT NOTIFICATION REMINDERS ==========
+(function() {
+  'use strict';
+
+  // ---------- Permission & Service Worker ----------
+  async function requestPermission() {
+    if (!('Notification' in window)) return;
+    if (Notification.permission === 'default') {
+      await Notification.requestPermission();
+    }
+  }
+
+  // ---------- Check if user studied today ----------
+  async function hasStudiedToday() {
+    try {
+      const db = await new Promise((res, rej) => {
+        const req = indexedDB.open('RecallEngine', 1);
+        req.onsuccess = () => res(req.result);
+        req.onerror = rej;
+      });
+      const tx = db.transaction('stats', 'readonly');
+      const store = tx.objectStore('stats');
+      const stats = await new Promise(res => {
+        const r = store.get('main');
+        r.onsuccess = () => res(r.result || {});
+      });
+      const today = new Date().toISOString().slice(0, 10);
+      const dailyAct = stats.dailyActivity || {};
+      return (dailyAct[today] || 0) > 0;
+    } catch {
+      return false;
+    }
+  }
+
+  // ---------- Send a beautiful notification ----------
+  function sendNotification(title, options = {}) {
+    if (Notification.permission !== 'granted') return;
+
+    const defaults = {
+      icon: 'icons/icon-192.png',         // must exist in your manifest
+      badge: 'icons/icon-72.png',         // Android monochrome icon
+      vibrate: [200, 100, 200],
+      tag: 'recall-reminder',             // replace, don't stack duplicates
+      requireInteraction: true,           // stay until user taps
+      actions: [
+        { action: 'study', title: '📚 Study Now' },
+        { action: 'close', title: '🔕 Dismiss' }
+      ],
+      data: { url: './' }
+    };
+
+    const merged = { ...defaults, ...options };
+    return navigator.serviceWorker.ready.then(reg => {
+      reg.showNotification(title, merged);
+    });
+  }
+
+  // ---------- Daily reminder at 8 PM ----------
+  function scheduleEveningReminder() {
+    const now = new Date();
+    const eightPM = new Date(now);
+    eightPM.setHours(20, 0, 0, 0);
+
+    // If 8 PM already passed, schedule for tomorrow
+    if (now > eightPM) eightPM.setDate(eightPM.getDate() + 1);
+
+    const msUntil = eightPM - now;
+    console.log('🔔 Daily reminder scheduled in', Math.round(msUntil/60000), 'minutes');
+
+    setTimeout(async () => {
+      const studied = await hasStudiedToday();
+      if (!studied) {
+        sendNotification('⏰ Time to study!', {
+          body: 'You haven’t reviewed any cards today. Keep your streak alive!',
+          tag: 'daily-reminder',
+          requireInteraction: true
+        });
+      }
+      // Reschedule for next day
+      scheduleEveningReminder();
+    }, msUntil);
+  }
+
+  // ---------- Session complete notification (called from your code) ----------
+  // We expose a global function so your app can call it after a session
+  window.sendStudyCompleteNotification = function(stats) {
+    if (!stats) return;
+    const todayXP = stats.dailyXp?.[new Date().toISOString().slice(0,10)]?.xp || 0;
+    const streak = stats.streakDays || 0;
+
+    if (todayXP >= 50 && streak > 1) {
+      sendNotification('🔥 Study session complete!', {
+        body: `You earned ${todayXP} XP today. ${streak}‑day streak! Come back tomorrow.`,
+        tag: 'session-done',
+        requireInteraction: false
+      });
+    } else if (streak === 1) {
+      sendNotification('✅ First study session done!', {
+        body: `Great start! Keep the streak going tomorrow.`,
+        tag: 'session-done'
+      });
+    }
+  };
+
+  // ---------- Notification click handling (in service worker) ----------
+  // See the service worker part below
+
+  // ---------- Initialize ----------
+  requestPermission().then(() => {
+    scheduleEveningReminder();
+  });
+
+  // Also re‑check every time the page becomes visible (if user comes back)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      requestPermission();
+    }
+  });
+
+})();
+</script>
 </body>
 </html>
