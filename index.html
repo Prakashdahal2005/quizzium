@@ -989,12 +989,13 @@
             width: 100%;
             background: var(--s2);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 11px 14px;
+            border-radius: 16px;
+            padding: 14px 16px;
+            min-height: 46px;
             font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.92rem;
             color: var(--text);
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
             outline: none;
         }
 
@@ -1003,23 +1004,49 @@
         select:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-dim);
+            transform: translateY(-0.5px);
         }
 
         select {
             appearance: none;
             -webkit-appearance: none;
+            -moz-appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239ba8be' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 14px center;
-            padding-right: 36px;
+            background-position: right 16px center;
+            padding-right: 44px;
             cursor: pointer;
             color: var(--text);
+        }
+
+        select::-ms-expand {
+            display: none;
         }
 
         select option {
             background: var(--s2);
             color: var(--text);
-            padding: 8px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .form-row .form-select,
+        .form-row .form-input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .form-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
         }
 
         .drop-zone {
@@ -1272,8 +1299,8 @@
         <div class="section" id="sec-library">
             <div class="sec-title" style="font-size:1.1rem; margin-bottom:8px;">✏️ Quick Card Creator</div>
             <div class="creator-panel">
-                <div style="display:flex; gap:10px; margin-bottom:12px;">
-                    <select id="create-deck-select" onchange="onDeckSelectChanged()">
+                <div class="form-row">
+                    <select id="create-deck-select" class="form-select" onchange="onDeckSelectChanged()">
                         <option value="">Select Deck or Create New</option>
                     </select>
                     <input type="text" id="new-deck-name" placeholder="Or new deck name" class="form-input">
@@ -3218,7 +3245,7 @@
             const select = document.getElementById('create-deck-select');
             if (!select) return;
             const currentVal = select.value;
-            select.innerHTML = '<option value="">-- Select Deck or Create New --</option>';
+            select.innerHTML = '<option value="">Select Deck or Create New</option>';
 
             const decks = await getAllDecks();
             for (const name of Object.keys(decks)) {
