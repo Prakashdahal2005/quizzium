@@ -1,11 +1,11 @@
-const CACHE_NAME = 'recall-v5';   // Bump version to force update
+const CACHE_NAME = 'recall-v6';   // Bump version to force update
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon1.png',
   './icon2.png',
-  './core/style.css',
+  './core/styles.css',
   './core/main.js',
   './core/app.js',
   './modules/study.html',
