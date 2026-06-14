@@ -1,446 +1,462 @@
 <style>
-.deck-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px;
-    margin: 16px 0;
-}
-
-.deck-card {
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    padding: 20px 18px 16px;
-    cursor: pointer;
-    transition: all 0.22s var(--ease);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-}
-
-.deck-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    border-radius: 3px 3px 0 0;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.deck-card.type-flash::before {
-    background: linear-gradient(90deg, #3ecfbe, #10b981);
-}
-
-.deck-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: var(--r-lg);
-    background: radial-gradient(ellipse at 50% 0%, rgba(62, 207, 190, 0.08) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.25s;
-    pointer-events: none;
-}
-
-.deck-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--border-strong);
-    background: var(--s2);
-    box-shadow: var(--shadow-elevated);
-}
-
-.deck-card:hover::before,
-.deck-card:hover::after {
-    opacity: 1;
-}
-
-.deck-card-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    margin-bottom: 12px;
-    flex-shrink: 0;
-}
-
-.deck-card-icon.flash {
-    background: rgba(62, 207, 190, 0.12);
-}
-
-.deck-card-name {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 4px;
-    line-height: 1.3;
-    word-break: break-word;
-}
-
-.deck-card-meta {
-    font-size: 0.72rem;
-    color: var(--text-3);
-    margin-bottom: 14px;
-    flex: 1;
-}
-
-.deck-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-}
-
-.chapter-card-actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-}
-
-.manager-item {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    background: var(--s2);
-    border: 1px solid var(--border);
-    border-radius: var(--r-md);
-    padding: 14px 16px;
-    margin-bottom: 10px;
-}
-
-.empty-msg {
-    color: var(--text-3);
-    font-size: 0.9rem;
-    padding: 14px 16px;
-    border: 1px dashed var(--border);
-    border-radius: var(--r-md);
-    background: var(--s3);
-}
-
-.chapter-manager-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 18px;
-}
-
-.deck-type-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 8px;
-    border-radius: 20px;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-}
-
-.deck-type-pill.flash {
-    background: rgba(62, 207, 190, 0.12);
-    color: #3ecfbe;
-}
-
-.study-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.progress-bar-wrap {
-    height: 4px;
-    background: var(--s3);
-    border-radius: 4px;
-    margin-bottom: 24px;
-    overflow: hidden;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--teal));
-    border-radius: 4px;
-    transition: width 0.4s var(--ease);
-}
-
-.timer-wrap {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--s2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 6px 12px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.82rem;
-    color: var(--text-2);
-}
-
-.question-card {
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: var(--r-xl);
-    padding: 28px;
-    margin-bottom: 14px;
-    box-shadow: var(--shadow-card);
-    transition: box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
-}
-
-.option-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    background: var(--s2);
-    border: 1px solid var(--border);
-    border-radius: var(--r-md);
-    padding: 13px 16px;
-    margin-bottom: 9px;
-    text-align: left;
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: var(--text-2);
-    cursor: pointer;
-    transition: all 0.15s var(--ease);
-}
-
-.option-btn:hover:not(:disabled) {
-    border-color: var(--border-strong);
-    background: var(--s3);
-    color: var(--text);
-}
-
-.option-btn.correct {
-    border-color: rgba(74, 222, 128, 0.5);
-    background: var(--good-dim);
-    color: var(--good);
-    animation: pulseGreen 0.3s ease;
-}
-
-.option-btn.wrong {
-    border-color: rgba(248, 113, 113, 0.5);
-    background: var(--bad-dim);
-    color: var(--bad);
-    animation: shakeBad 0.2s ease;
-}
-
-@keyframes pulseGreen {
-    0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4) }
-    100% { box-shadow: 0 0 0 6px rgba(74, 222, 128, 0) }
-}
-
-@keyframes shakeBad {
-    0% { transform: translateX(0) }
-    25% { transform: translateX(-3px) }
-    75% { transform: translateX(3px) }
-    100% { transform: translateX(0) }
-}
-
-.feedback-card {
-    background: var(--s2);
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    padding: 16px 20px;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-}
-
-.explanation-card {
-    background: var(--s1);
-    border-left: 4px solid var(--accent);
-    border-radius: var(--r-md);
-    padding: 16px 20px;
-    margin-bottom: 14px;
-    font-size: 0.85rem;
-    color: var(--text-2);
-    line-height: 1.65;
-}
-
-.explanation-card strong {
-    color: var(--accent);
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 6px;
-}
-
-.wrong-expl-highlight {
-    border-left: 4px solid var(--bad);
-    background: rgba(248, 113, 113, 0.05);
-}
-
-.flashcard-wrapper {
-    perspective: 1000px;
-    width: 100%;
-    height: 280px;
-    margin: 16px auto 24px;
-    cursor: pointer;
-}
-
-.flashcard-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.6s var(--ease);
-    transform-style: preserve-3d;
-}
-
-.flashcard-wrapper.flipped .flashcard-inner {
-    transform: rotateY(180deg);
-}
-
-.flashcard-front,
-.flashcard-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: var(--r-xl);
-    border: 1px solid var(--border);
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: var(--shadow-card);
-    overflow-y: auto;
-}
-
-.flashcard-front {
-    background: var(--s1);
-    color: var(--text);
-}
-
-.flashcard-back {
-    background: var(--s2);
-    color: var(--text-2);
-    transform: rotateY(180deg);
-    border-color: var(--border-strong);
-}
-
-.flashcard-prompt {
-    font-size: 0.68rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-3);
-    margin-bottom: 18px;
-}
-
-.flashcard-text {
-    font-size: 1.25rem;
-    font-weight: 500;
-    line-height: 1.5;
-    color: var(--text);
-    word-break: break-word;
-}
-
-.flashcard-back .flashcard-text {
-    font-size: 1.15rem;
-    color: var(--text-2);
-}
-
-.flashcard-controls {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-top: 18px;
-    animation: fadeUp 0.3s var(--ease);
-    width: 100%;
-}
-
-.flashcard-btn {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    background: var(--s2);
-    font-size: 1.6rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s var(--ease);
-}
-
-.flashcard-btn-dont-know {
-    color: var(--bad);
-    border-color: rgba(248, 113, 113, 0.35);
-}
-
-.flashcard-btn-dont-know:hover {
-    background: var(--bad-dim);
-    border-color: var(--bad);
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(248, 113, 113, 0.25);
-}
-
-.flashcard-btn-know-it {
-    color: var(--good);
-    border-color: rgba(74, 222, 128, 0.35);
-}
-
-.flashcard-btn-know-it:hover {
-    background: var(--good-dim);
-    border-color: var(--good);
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(74, 222, 128, 0.25);
-}
-
-.flashcard-btn-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-align: center;
-    color: var(--text-3);
-    margin-top: 4px;
-    font-family: 'DM Sans', sans-serif;
-}
-
-.flashcard-btn-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-@media (max-width:600px) {
     .deck-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 14px;
+        margin: 16px 0;
+    }
+
+    .deck-card {
+        background: var(--s1);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 20px 18px 16px;
+        cursor: pointer;
+        transition: all 0.22s var(--ease);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .deck-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        border-radius: 3px 3px 0 0;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .deck-card.type-flash::before {
+        background: linear-gradient(90deg, #3ecfbe, #10b981);
+    }
+
+    .deck-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: var(--r-lg);
+        background: radial-gradient(ellipse at 50% 0%, rgba(62, 207, 190, 0.08) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.25s;
+        pointer-events: none;
+    }
+
+    .deck-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--border-strong);
+        background: var(--s2);
+        box-shadow: var(--shadow-elevated);
+    }
+
+    .deck-card:hover::before,
+    .deck-card:hover::after {
+        opacity: 1;
+    }
+
+    .deck-card-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+        flex-shrink: 0;
+    }
+
+    .deck-card-icon.flash {
+        background: rgba(62, 207, 190, 0.12);
+    }
+
+    .deck-card-name {
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--text);
+        margin-bottom: 4px;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    .deck-card-meta {
+        font-size: 0.72rem;
+        color: var(--text-3);
+        margin-bottom: 14px;
+        flex: 1;
+    }
+
+    .deck-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    .chapter-card-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .manager-item {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        background: var(--s2);
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
+        padding: 14px 16px;
+        margin-bottom: 10px;
+    }
+
+    .empty-msg {
+        color: var(--text-3);
+        font-size: 0.9rem;
+        padding: 14px 16px;
+        border: 1px dashed var(--border);
+        border-radius: var(--r-md);
+        background: var(--s3);
+    }
+
+    .chapter-manager-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .deck-type-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .deck-type-pill.flash {
+        background: rgba(62, 207, 190, 0.12);
+        color: #3ecfbe;
+    }
+
+    .study-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .progress-bar-wrap {
+        height: 4px;
+        background: var(--s3);
+        border-radius: 4px;
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+        border-radius: 4px;
+        transition: width 0.4s var(--ease);
+    }
+
+    .timer-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--s2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 6px 12px;
+        font-family: 'DM Mono', monospace;
+        font-size: 0.82rem;
+        color: var(--text-2);
+    }
+
+    .question-card {
+        background: var(--s1);
+        border: 1px solid var(--border);
+        border-radius: var(--r-xl);
+        padding: 28px;
+        margin-bottom: 14px;
+        box-shadow: var(--shadow-card);
+        transition: box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+    }
+
+    .option-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        background: var(--s2);
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
+        padding: 13px 16px;
+        margin-bottom: 9px;
+        text-align: left;
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: var(--text-2);
+        cursor: pointer;
+        transition: all 0.15s var(--ease);
+    }
+
+    .option-btn:hover:not(:disabled) {
+        border-color: var(--border-strong);
+        background: var(--s3);
+        color: var(--text);
+    }
+
+    .option-btn.correct {
+        border-color: rgba(74, 222, 128, 0.5);
+        background: var(--good-dim);
+        color: var(--good);
+        animation: pulseGreen 0.3s ease;
+    }
+
+    .option-btn.wrong {
+        border-color: rgba(248, 113, 113, 0.5);
+        background: var(--bad-dim);
+        color: var(--bad);
+        animation: shakeBad 0.2s ease;
+    }
+
+    @keyframes pulseGreen {
+        0% {
+            box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4)
+        }
+
+        100% {
+            box-shadow: 0 0 0 6px rgba(74, 222, 128, 0)
+        }
+    }
+
+    @keyframes shakeBad {
+        0% {
+            transform: translateX(0)
+        }
+
+        25% {
+            transform: translateX(-3px)
+        }
+
+        75% {
+            transform: translateX(3px)
+        }
+
+        100% {
+            transform: translateX(0)
+        }
+    }
+
+    .feedback-card {
+        background: var(--s2);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 16px 20px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .explanation-card {
+        background: var(--s1);
+        border-left: 4px solid var(--accent);
+        border-radius: var(--r-md);
+        padding: 16px 20px;
+        margin-bottom: 14px;
+        font-size: 0.85rem;
+        color: var(--text-2);
+        line-height: 1.65;
+    }
+
+    .explanation-card strong {
+        color: var(--accent);
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .wrong-expl-highlight {
+        border-left: 4px solid var(--bad);
+        background: rgba(248, 113, 113, 0.05);
     }
 
     .flashcard-wrapper {
-        height: 240px;
+        perspective: 1000px;
+        width: 100%;
+        height: 280px;
+        margin: 16px auto 24px;
+        cursor: pointer;
     }
 
-    .flashcard-btn {
-        width: 54px;
-        height: 54px;
-        font-size: 1.3rem;
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s var(--ease);
+        transform-style: preserve-3d;
+    }
+
+    .flashcard-wrapper.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flashcard-front,
+    .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: var(--r-xl);
+        border: 1px solid var(--border);
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: var(--shadow-card);
+        overflow-y: auto;
+    }
+
+    .flashcard-front {
+        background: var(--s1);
+        color: var(--text);
+    }
+
+    .flashcard-back {
+        background: var(--s2);
+        color: var(--text-2);
+        transform: rotateY(180deg);
+        border-color: var(--border-strong);
+    }
+
+    .flashcard-prompt {
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-3);
+        margin-bottom: 18px;
+    }
+
+    .flashcard-text {
+        font-size: 1.25rem;
+        font-weight: 500;
+        line-height: 1.5;
+        color: var(--text);
+        word-break: break-word;
+    }
+
+    .flashcard-back .flashcard-text {
+        font-size: 1.15rem;
+        color: var(--text-2);
     }
 
     .flashcard-controls {
-        gap: 16px;
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-top: 18px;
+        animation: fadeUp 0.3s var(--ease);
+        width: 100%;
     }
-}
+
+    .flashcard-btn {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        background: var(--s2);
+        font-size: 1.6rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s var(--ease);
+    }
+
+    .flashcard-btn-dont-know {
+        color: var(--bad);
+        border-color: rgba(248, 113, 113, 0.35);
+    }
+
+    .flashcard-btn-dont-know:hover {
+        background: var(--bad-dim);
+        border-color: var(--bad);
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(248, 113, 113, 0.25);
+    }
+
+    .flashcard-btn-know-it {
+        color: var(--good);
+        border-color: rgba(74, 222, 128, 0.35);
+    }
+
+    .flashcard-btn-know-it:hover {
+        background: var(--good-dim);
+        border-color: var(--good);
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(74, 222, 128, 0.25);
+    }
+
+    .flashcard-btn-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-align: center;
+        color: var(--text-3);
+        margin-top: 4px;
+        font-family: 'DM Sans', sans-serif;
+    }
+
+    .flashcard-btn-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    @media (max-width:600px) {
+        .deck-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .flashcard-wrapper {
+            height: 240px;
+        }
+
+        .flashcard-btn {
+            width: 54px;
+            height: 54px;
+            font-size: 1.3rem;
+        }
+
+        .flashcard-controls {
+            gap: 16px;
+        }
+    }
 </style>
 
 <div class="section visible" id="sec-study">
@@ -455,12 +471,9 @@
             <div class="study-meta" id="study-meta-label" style="font-size:0.8rem; color:var(--text-2);">— due</div>
             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                 <span id="combo-indicator"></span>
-                <label id="prefs-type-answer-wrap"
-                    style="display:none; align-items:center; gap:6px; cursor:pointer; font-size:0.75rem; color:var(--text-2);">
-                    <input type="checkbox" id="prefs-type-answer" style="accent-color:var(--teal);"> ✍️ Type Answer
-                </label>
                 <div class="timer-wrap"><span id="timer-text">60s</span></div>
-                <button class="btn btn-ghost btn-sm" style="white-space:nowrap;" onclick="deleteCurrentCard()">Delete current card</button>
+                <button class="btn btn-ghost btn-sm" style="white-space:nowrap;" onclick="deleteCurrentCard()">Delete
+                    current card</button>
             </div>
         </div>
         <div class="progress-bar-wrap">
@@ -471,88 +484,174 @@
 </div>
 
 <script>
-// Global study state variables are declared in core/main.js
+    // Global study state variables are declared in core/main.js
 
-function stopTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = null; }
-function clearAutoTimer() { if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+    function stopTimer() { if (timerInterval) clearInterval(timerInterval); timerInterval = null; }
+    function clearAutoTimer() { if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
 
-window.exitStudy = async function () {
-    clearAutoTimer(); stopTimer();
-    currentDeck = null; currentCard = null; chapterContext = null; chapterShuffleUnlocked = false;
-    document.getElementById('study-picker').style.display = 'block';
-    document.getElementById('study-session').style.display = 'none';
-    await loadStats();
-};
+    window.exitStudy = async function () {
+        clearAutoTimer(); stopTimer();
+        currentDeck = null; currentCard = null; chapterContext = null; chapterShuffleUnlocked = false;
+        document.getElementById('study-picker').style.display = 'block';
+        document.getElementById('study-session').style.display = 'none';
+        await loadStats();
+    };
 
-window.startChapterStudy = async function (chapterName) {
-    const chapter = await getData('chapters', chapterName);
-    if (!chapter || !chapter.flashcards || !chapter.mcqs) return toast('Invalid chapter');
-    chapterContext = { name: chapterName, flashcards: chapter.flashcards, mcqs: chapter.mcqs, phase: 'flashcards', currentIndex: 0, answers: [] };
-    chapterShuffleUnlocked = false;
-    currentDeck = chapterName;
-    currentDeckType = 'flashcard';
-    document.getElementById('study-picker').style.display = 'none';
-    document.getElementById('study-session').style.display = 'block';
-    document.getElementById('study-meta-label').textContent = `Chapter: ${chapterName} · Flashcards`;
-    document.getElementById('study-progress').style.width = '0%';
-    document.getElementById('card-area').innerHTML = '';
-    showChapterFlashcard();
-};
+    window.startChapterStudy = async function (chapterName) {
+        const chapter = await getData('chapters', chapterName);
+        if (!chapter || !chapter.flashcards || !chapter.mcqs) return toast('Invalid chapter');
+        chapterContext = { name: chapterName, flashcards: chapter.flashcards, mcqs: chapter.mcqs, phase: 'flashcards', currentIndex: 0, answers: [] };
+        chapterShuffleUnlocked = false;
+        currentDeck = chapterName;
+        currentDeckType = 'flashcard';
+        document.getElementById('study-picker').style.display = 'none';
+        document.getElementById('study-session').style.display = 'block';
+        document.getElementById('study-meta-label').textContent = `Chapter: ${chapterName} · Flashcards`;
+        document.getElementById('study-progress').style.width = '0%';
+        document.getElementById('card-area').innerHTML = '';
+        showChapterFlashcard();
+    };
 
-function showChapterFlashcard() {
-    if (!chapterContext || chapterContext.phase !== 'flashcards') return;
-    const fc = chapterContext.flashcards[chapterContext.currentIndex];
-    if (!fc) {
-        chapterContext.phase = 'mcqs'; chapterContext.currentIndex = 0; chapterContext.answers = [];
-        document.getElementById('study-meta-label').textContent = `Chapter: ${chapterContext.name} · MCQs`;
+    window.startChapterMCQ = async function (chapterName) {
+        const chapter = await getData('chapters', chapterName);
+        if (!chapter || !chapter.mcqs) return toast('Invalid chapter');
+        chapterContext = { name: chapterName, flashcards: chapter.flashcards || [], mcqs: chapter.mcqs, phase: 'mcqs', currentIndex: 0, answers: [] };
+        chapterShuffleUnlocked = false;
+        currentDeck = chapterName;
+        currentDeckType = 'mcq';
+        document.getElementById('study-picker').style.display = 'none';
+        document.getElementById('study-session').style.display = 'block';
+        document.getElementById('study-meta-label').textContent = `Chapter: ${chapterName} · MCQs`;
+        document.getElementById('study-progress').style.width = '0%';
+        document.getElementById('card-area').innerHTML = '';
         showChapterMCQ();
-        return;
-    }
-    currentDeckType = 'flashcard';
-    document.getElementById('prefs-type-answer-wrap').style.display = 'inline-flex';
-    const q = fc.front || fc.question || '?', a = fc.back || fc.answer || '?';
-    currentCard = { idx: chapterContext.currentIndex, question: q, answer: a, ease: 250, type: 'new' };
-    const isType = document.getElementById('prefs-type-answer')?.checked;
-    document.getElementById('card-area').innerHTML = `
+    };
+
+    window.startRandomMCQSession = async function () {
+        const chapters = await getAllChapters();
+        const allMcqs = [];
+        Object.values(chapters).forEach(chapter => {
+            if (Array.isArray(chapter.mcqs)) {
+                chapter.mcqs.forEach(mcq => {
+                    allMcqs.push({ ...mcq, chapter: chapter.chapter });
+                });
+            }
+        });
+        if (!allMcqs.length) return toast('No MCQs available for random practice');
+        chapterContext = { name: 'Random MCQ Practice', flashcards: [], mcqs: allMcqs, phase: 'mcqs', currentIndex: 0, answers: [] };
+        chapterShuffleUnlocked = true;
+        currentDeck = 'random-mcqs';
+        currentDeckType = 'mcq';
+        document.getElementById('study-picker').style.display = 'none';
+        document.getElementById('study-session').style.display = 'block';
+        document.getElementById('study-meta-label').textContent = 'Random MCQ Practice';
+        document.getElementById('study-progress').style.width = '0%';
+        document.getElementById('card-area').innerHTML = '';
+        showChapterMCQ(true);
+    };
+
+    function showChapterFlashcard() {
+        if (!chapterContext || chapterContext.phase !== 'flashcards') return;
+        const fc = chapterContext.flashcards[chapterContext.currentIndex];
+        if (!fc) {
+            chapterContext.phase = 'mcqs'; chapterContext.currentIndex = 0; chapterContext.answers = [];
+            document.getElementById('study-meta-label').textContent = `Chapter: ${chapterContext.name} · MCQs`;
+            showChapterMCQ();
+            return;
+        }
+        currentDeckType = 'flashcard';
+        const q = fc.front || fc.question || '?', a = fc.back || fc.answer || '?';
+        currentCard = { idx: chapterContext.currentIndex, question: q, answer: a, ease: 250, type: 'new' };
+        document.getElementById('card-area').innerHTML = `
         <div class="question-card" style="padding:16px 20px 24px;">
             <div class="card-eyebrow"><span>📘 Chapter Flashcard</span></div>
-            <div class="flashcard-wrapper" id="flashcard-element" onclick="if(!document.getElementById('prefs-type-answer')?.checked) flipFlashcard();">
+            <div class="flashcard-wrapper" id="flashcard-element" onclick="flipFlashcard();">
                 <div class="flashcard-inner">
                     <div class="flashcard-front"><div class="flashcard-prompt">Concept / Question</div><div class="flashcard-text">${esc(q)}</div><div style="font-size:0.72rem; color:var(--text-3); margin-top:24px;">👆 Tap to reveal</div></div>
                     <div class="flashcard-back"><div class="flashcard-prompt">Answer</div><div class="flashcard-text">${esc(a)}</div></div>
                 </div>
             </div>
-            ${isType ? `<div style="margin-top:16px; display:flex; gap:8px;"><input type="text" id="fc-type-input" placeholder="Type your answer..." class="form-input" style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault(); flipFlashcard();}"><button class="btn btn-primary" onclick="flipFlashcard()">Check</button></div>` : ''}
             <div id="flashcard-controls-area"></div>
         </div>
         <div id="feedback-area"></div>
         <div id="next-btn-area"></div>`;
-    startTimer(60); startTs = Date.now();
-}
-
-function showChapterMCQ(shuffle = false) {
-    if (!chapterContext || chapterContext.phase !== 'mcqs') return;
-    const mcqs = chapterContext.mcqs;
-    if (chapterContext.currentIndex >= mcqs.length) { finishChapter(); return; }
-    currentDeckType = 'mcq';
-    document.getElementById('prefs-type-answer-wrap').style.display = 'none';
-    const cardData = mcqs[chapterContext.currentIndex];
-    let opts = [cardData.option1, cardData.option2, cardData.option3, cardData.option4];
-    let correctIdx = cardData.correct - 1;
-    let shuffled = [...opts], newCorrect = correctIdx;
-    if (shuffle || chapterShuffleUnlocked) {
-        let indices = [0, 1, 2, 3];
-        for (let i = indices.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[indices[i], indices[j]] = [indices[j], indices[i]]; }
-        shuffled = indices.map(i => opts[i]);
-        newCorrect = indices.indexOf(correctIdx);
+        startTimer(60); startTs = Date.now();
     }
-    currentCard = { idx: chapterContext.currentIndex, question: cardData.question, options: shuffled, correct: newCorrect + 1, explanation: cardData.explanation || '', ease: 250, type: 'new' };
-    const letters = ['A', 'B', 'C', 'D'];
-    let optsHTML = '';
-    currentCard.options.forEach((opt, i) => {
-        optsHTML += `<button class="option-btn" id="opt-${i + 1}" onclick="chooseAnswer(${i + 1})"><span class="opt-key" style="background:var(--s3); padding:3px 8px; border-radius:5px; font-size:0.75rem; font-weight:700; margin-right:10px;">${letters[i]}</span>${esc(opt)}</button>`;
-    });
-    document.getElementById('card-area').innerHTML = `
+
+    function parseMCQOptions(optionsField) {
+        if (Array.isArray(optionsField)) {
+            const normalized = optionsField.flatMap(opt => {
+                if (opt == null) return [];
+                const str = String(opt).trim();
+                if (!str) return [];
+                if (str.startsWith('[') && str.endsWith(']')) {
+                    try {
+                        const parsed = JSON.parse(str);
+                        if (Array.isArray(parsed)) return parseMCQOptions(parsed);
+                    } catch (e) {
+                        // ignore and continue
+                    }
+                }
+                return str.split(/[\r\n;,|]+/).map(v => String(v || '').trim()).filter(v => v !== '');
+            });
+            return normalized.length ? normalized : [''];
+        }
+        if (optionsField && typeof optionsField === 'object') {
+            const keys = Object.keys(optionsField);
+            const isNumericKeys = keys.every(k => String(parseInt(k, 10)) === k);
+            const sortedKeys = isNumericKeys ? keys.sort((a, b) => parseInt(a, 10) - parseInt(b, 10)) : keys;
+            const values = sortedKeys.map(k => optionsField[k]);
+            return parseMCQOptions(values);
+        }
+        if (typeof optionsField === 'string') {
+            const trimmed = optionsField.trim();
+            if (!trimmed) return [];
+            if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                try {
+                    const parsed = JSON.parse(trimmed);
+                    if (Array.isArray(parsed)) {
+                        const normalized = parseMCQOptions(parsed);
+                        return normalized.length ? normalized : [''];
+                    }
+                } catch (e) {
+                    // fall through to delimiter parsing
+                }
+            }
+            const parts = trimmed
+                .split(/[\r\n;,|]+/)
+                .map(opt => String(opt || '').trim())
+                .filter(opt => opt !== '');
+            return parts.length ? parts : [''];
+        }
+        return [];
+    }
+
+    function showChapterMCQ(shuffle = false) {
+        if (!chapterContext || chapterContext.phase !== 'mcqs') return;
+        const mcqs = chapterContext.mcqs;
+        if (chapterContext.currentIndex >= mcqs.length) { finishChapter(); return; }
+        currentDeckType = 'mcq';
+        const cardData = mcqs[chapterContext.currentIndex];
+        const options = parseMCQOptions(cardData.options);
+        let correctIdx = Number.isFinite(cardData.correct) ? cardData.correct : 0;
+        if (correctIdx < 0) correctIdx = 0;
+        if (correctIdx >= options.length) correctIdx = options.length - 1;
+        if (!options.length) options.push('');
+        let shuffled = options;
+        let newCorrect = correctIdx;
+        if (shuffle || chapterShuffleUnlocked) {
+            const indices = options.map((_, idx) => idx);
+            for (let i = indices.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[indices[i], indices[j]] = [indices[j], indices[i]]; }
+            shuffled = indices.map(i => options[i]);
+            newCorrect = indices.indexOf(correctIdx);
+        }
+        currentCard = { idx: chapterContext.currentIndex, question: cardData.question || cardData.front || '', options: shuffled, correct: newCorrect, explanation: cardData.explanation || '', ease: 250, type: 'new' };
+        const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+        let optsHTML = '';
+        currentCard.options.forEach((opt, i) => {
+            optsHTML += `<button class="option-btn" id="opt-${i}" onclick="chooseAnswer(${i})"><span class="opt-key" style="background:var(--s3); padding:3px 8px; border-radius:5px; font-size:0.75rem; font-weight:700; margin-right:10px;">${letters[i]}</span>${esc(opt)}</button>`;
+        });
+        document.getElementById('card-area').innerHTML = `
         <div class="question-card">
             <div class="card-eyebrow"><span>📘 Chapter MCQ</span></div>
             <div class="question-text" style="font-weight:600; font-size:1.05rem; margin-bottom:20px;">${esc(currentCard.question)}</div>
@@ -560,78 +659,84 @@ function showChapterMCQ(shuffle = false) {
         </div>
         <div id="feedback-area"></div>
         <div id="next-btn-area"></div>`;
-    startTimer(60); startTs = Date.now();
-}
+        startTimer(60); startTs = Date.now();
+    }
 
-window.flipFlashcard = function () {
-    const card = document.getElementById('flashcard-element'); if (!card) return;
-    SoundManager.playFlip(); card.classList.add('flipped');
-    const ctrlArea = document.getElementById('flashcard-controls-area');
-    if (ctrlArea && !ctrlArea.innerHTML) {
-        const isType = document.getElementById('prefs-type-answer')?.checked;
-        if (isType) {
-            const userVal = (document.getElementById('fc-type-input')?.value || '').trim();
-            const correctVal = currentCard.answer.trim();
-            const clean = s => s.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "").replace(/\s+/g, " ");
-            const match = clean(userVal) === clean(correctVal);
-            ctrlArea.innerHTML = `<div style="text-align:center; width:100%;"><div style="color:${match ? 'var(--good)' : 'var(--bad)'}; font-weight:600; margin-bottom:16px;">${match ? '✅ Accurate!' : '❌ Mismatch.'}</div><div class="flashcard-controls"><div class="flashcard-btn-wrap"><button class="flashcard-btn flashcard-btn-dont-know" onclick="finalizeChapterFlashcard('again')">✕</button><span class="flashcard-btn-label">Don't Know</span></div><div class="flashcard-btn-wrap"><button class="flashcard-btn flashcard-btn-know-it" onclick="finalizeChapterFlashcard('good')">✓</button><span class="flashcard-btn-label">Know It</span></div></div></div>`;
-        } else {
+    window.flipFlashcard = function () {
+        const card = document.getElementById('flashcard-element'); if (!card) return;
+        SoundManager.playFlip(); card.classList.add('flipped');
+        const ctrlArea = document.getElementById('flashcard-controls-area');
+        if (ctrlArea && !ctrlArea.innerHTML) {
             ctrlArea.innerHTML = `<div class="flashcard-controls"><div class="flashcard-btn-wrap"><button class="flashcard-btn flashcard-btn-dont-know" onclick="finalizeChapterFlashcard('again')">✕</button><span class="flashcard-btn-label">Don't Know</span></div><div class="flashcard-btn-wrap"><button class="flashcard-btn flashcard-btn-know-it" onclick="finalizeChapterFlashcard('good')">✓</button><span class="flashcard-btn-label">Know It</span></div></div>`;
         }
-    }
-};
+    };
 
-window.finalizeChapterFlashcard = async function (button) {
-    const elapsed = Math.round((Date.now() - startTs) / 1000);
-    const isRight = (button !== 'again');
-    if (isRight) SoundManager.playCorrect(); else SoundManager.playIncorrect();
-    await triggerAdvancedDopamineReward(isRight, elapsed, document.querySelector('.question-card'));
-    chapterContext.currentIndex++;
-    showChapterFlashcard();
-};
+    window.finalizeChapterFlashcard = async function (button) {
+        const elapsed = Math.round((Date.now() - startTs) / 1000);
+        const isRight = (button !== 'again');
+        if (isRight) SoundManager.playCorrect(); else SoundManager.playIncorrect();
+        await triggerAdvancedDopamineReward(isRight, elapsed, document.querySelector('.question-card'));
+        chapterContext.currentIndex++;
+        showChapterFlashcard();
+    };
 
-window.chooseAnswer = async function (chosen) {
-    if (!currentCard) return;
-    stopTimer();
-    const elapsed = Math.round((Date.now() - startTs) / 1000);
-    const isRight = (chosen === currentCard.correct);
-    document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-    for (let i = 1; i <= 4; i++) {
-        const btn = document.getElementById('opt-' + i); if (!btn) continue;
-        if (i === currentCard.correct) btn.classList.add('correct');
-        else if (i === chosen && !isRight) btn.classList.add('wrong');
-    }
-    if (isRight) SoundManager.playCorrect(); else SoundManager.playIncorrect();
-    const explHtml = currentCard.explanation ? `<div class="explanation-card ${!isRight ? 'wrong-expl-highlight' : ''}" id="exp-box"><strong>📖 EXPLANATION</strong>${esc(currentCard.explanation)}</div>` : '';
-    document.getElementById('feedback-area').innerHTML = `<div class="feedback-card"><div class="feedback-icon" style="font-size:1.4rem;">${isRight ? '✅' : '❌'}</div><div><div style="font-weight:700; color:${isRight ? 'var(--good)' : 'var(--bad)'}">${isRight ? 'Correct!' : 'Incorrect'}</div></div></div>${explHtml}`;
-    const expBox = document.getElementById('exp-box'); if (expBox) setTimeout(() => expBox.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
-    chapterContext.answers.push(isRight);
-    await triggerAdvancedDopamineReward(isRight, elapsed, document.querySelector('.question-card'));
-    autoAdvanceTimer = setTimeout(() => advanceChapterMCQ(), 4000);
-    document.getElementById('next-btn-area').innerHTML = `<button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="clearTimeout(autoAdvanceTimer); advanceChapterMCQ()">Continue →</button>`;
-};
+    window.chooseAnswer = async function (chosen) {
+        if (!currentCard) return;
+        stopTimer();
+        const elapsed = Math.round((Date.now() - startTs) / 1000);
+        const isRight = (chosen === currentCard.correct);
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        currentCard.options.forEach((_, idx) => {
+            const btn = document.getElementById('opt-' + idx);
+            if (!btn) return;
+            if (idx === currentCard.correct) btn.classList.add('correct');
+            else if (idx === chosen && !isRight) btn.classList.add('wrong');
+        });
+        if (isRight) SoundManager.playCorrect(); else SoundManager.playIncorrect();
+        const explHtml = currentCard.explanation ? `<div class="explanation-card ${!isRight ? 'wrong-expl-highlight' : ''}" id="exp-box"><strong>📖 EXPLANATION</strong>${esc(currentCard.explanation)}</div>` : '';
+        document.getElementById('feedback-area').innerHTML = `<div class="feedback-card"><div class="feedback-icon" style="font-size:1.4rem;">${isRight ? '✅' : '❌'}</div><div><div style="font-weight:700; color:${isRight ? 'var(--good)' : 'var(--bad)'}">${isRight ? 'Correct!' : 'Incorrect'}</div></div></div>${explHtml}`;
+        const expBox = document.getElementById('exp-box'); if (expBox) setTimeout(() => expBox.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+        chapterContext.answers.push(isRight);
+        await triggerAdvancedDopamineReward(isRight, elapsed, document.querySelector('.question-card'));
+        if (isRight) {
+            autoAdvanceTimer = setTimeout(() => advanceChapterMCQ(), 4500);
+        } else {
+            autoAdvanceTimer = setTimeout(() => advanceChapterMCQ(), 7000);
+        }
+        document.getElementById('next-btn-area').innerHTML = `<button class="btn btn-primary" style="width:100%; margin-top:6px;" onclick="clearTimeout(autoAdvanceTimer); advanceChapterMCQ()">Continue →</button>`;
+    };
 
-function advanceChapterMCQ() { chapterContext.currentIndex++; showChapterMCQ(chapterShuffleUnlocked); }
-window.advanceChapterMCQ = advanceChapterMCQ;
+    function advanceChapterMCQ() { chapterContext.currentIndex++; showChapterMCQ(chapterShuffleUnlocked); }
+    window.advanceChapterMCQ = advanceChapterMCQ;
 
-window.openChapterManager = async function (chapterName) {
-    document.getElementById('chapter-grid').style.display = 'none';
-    document.getElementById('chapter-manager').style.display = 'block';
-    await renderChapterManager(chapterName);
-};
+    window.openChapterManager = async function (chapterName) {
+        document.getElementById('chapter-grid').style.display = 'none';
+        document.getElementById('chapter-manager').style.display = 'block';
+        await renderChapterManager(chapterName);
+    };
 
-window.exitChapterManager = function () {
-    document.getElementById('chapter-manager').style.display = 'none';
-    document.getElementById('chapter-grid').style.display = '';
-};
+    window.exitChapterManager = function () {
+        document.getElementById('chapter-manager').style.display = 'none';
+        document.getElementById('chapter-grid').style.display = '';
+    };
 
-async function renderChapterManager(chapterName) {
-    const chapter = await getData('chapters', chapterName);
-    if (!chapter) return toast('Invalid chapter');
-    const flashcards = Array.isArray(chapter.flashcards) ? chapter.flashcards : [];
-    const mcqs = Array.isArray(chapter.mcqs) ? chapter.mcqs : [];
-    const flashcardsHtml = flashcards.length
-        ? flashcards.map((fc, idx) => `
+    document.addEventListener('DOMContentLoaded', () => {
+        const randomButton = document.createElement('button');
+        randomButton.className = 'btn btn-primary';
+        randomButton.textContent = 'Random MCQ Practice';
+        randomButton.style.marginBottom = '16px';
+        randomButton.onclick = () => startRandomMCQSession();
+        const picker = document.getElementById('study-picker');
+        if (picker) picker.insertBefore(randomButton, picker.firstChild);
+    });
+
+    async function renderChapterManager(chapterName) {
+        const chapter = await getData('chapters', chapterName);
+        if (!chapter) return toast('Invalid chapter');
+        const flashcards = Array.isArray(chapter.flashcards) ? chapter.flashcards : [];
+        const mcqs = Array.isArray(chapter.mcqs) ? chapter.mcqs : [];
+        const flashcardsHtml = flashcards.length
+            ? flashcards.map((fc, idx) => `
             <div class="manager-item">
                 <div>
                     <div style="font-weight:700; margin-bottom:6px;">${idx + 1}. ${esc(fc.front || fc.question || 'Untitled')}</div>
@@ -639,18 +744,18 @@ async function renderChapterManager(chapterName) {
                 </div>
                 <button class="btn btn-ghost btn-sm delete-btn" onclick="event.stopPropagation(); deleteChapterItem(${JSON.stringify(chapterName)}, 'flashcard', ${idx})">Delete</button>
             </div>`).join('')
-        : `<div class="empty-msg">No flashcards found.</div>`;
-    const mcqsHtml = mcqs.length
-        ? mcqs.map((cq, idx) => `
+            : `<div class="empty-msg">No flashcards found.</div>`;
+        const mcqsHtml = mcqs.length
+            ? mcqs.map((cq, idx) => `
             <div class="manager-item">
                 <div>
                     <div style="font-weight:700; margin-bottom:6px;">${idx + 1}. ${esc(cq.question || 'Untitled')}</div>
-                    <div style="color:var(--text-3); font-size:0.85rem;">Answer: ${esc(cq['option' + cq.correct] || '')}</div>
+                    <div style="color:var(--text-3); font-size:0.85rem;">Answer: ${esc((Array.isArray(cq.options) ? cq.options[cq.correct] : '') || '')}</div>
                 </div>
                 <button class="btn btn-ghost btn-sm delete-btn" onclick="event.stopPropagation(); deleteChapterItem(${JSON.stringify(chapterName)}, 'mcq', ${idx})">Delete</button>
             </div>`).join('')
-        : `<div class="empty-msg">No MCQs found.</div>`;
-    document.getElementById('chapter-manager').innerHTML = `
+            : `<div class="empty-msg">No MCQs found.</div>`;
+        document.getElementById('chapter-manager').innerHTML = `
         <div class="chapter-manager-header">
             <div>
                 <div class="sec-title" style="margin-bottom:6px;">Manage Chapter</div>
@@ -669,137 +774,167 @@ async function renderChapterManager(chapterName) {
             <div style="font-size:0.95rem; font-weight:700; margin-bottom:10px;">MCQs</div>
             ${mcqsHtml}
         </div>`;
-}
+    }
 
-window.deleteChapterAndRefresh = async function (chapterName) {
-    const result = await Swal.fire({
-        title: 'Delete this chapter?',
-        text: 'This will remove the chapter and all its cards permanently.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel'
-    });
-    if (!result.isConfirmed) return;
-    await deleteChapter(chapterName);
-    toast('Chapter deleted');
-    await renderStudyChapters();
-    exitChapterManager();
-};
+    window.deleteChapterAndRefresh = async function (chapterName) {
+        const result = await Swal.fire({
+            title: 'Delete this chapter?',
+            text: 'This will remove the chapter and all its cards permanently.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
+        });
+        if (!result.isConfirmed) return;
+        await deleteChapter(chapterName);
+        toast('Chapter deleted');
+        await renderStudyChapters();
+        exitChapterManager();
+    };
 
-window.deleteChapterItem = async function (chapterName, itemType, idx) {
-    const chapter = await getData('chapters', chapterName);
-    if (!chapter) return toast('Invalid chapter');
-    const list = itemType === 'flashcard' ? chapter.flashcards : chapter.mcqs;
-    if (!Array.isArray(list) || idx < 0 || idx >= list.length) return toast('Invalid item');
-    const result = await Swal.fire({
-        title: 'Delete this card?',
-        text: 'This cannot be undone.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel'
-    });
-    if (!result.isConfirmed) return;
-    list.splice(idx, 1);
-    await saveChapter(chapterName, chapter);
-    toast(`${itemType === 'flashcard' ? 'Flashcard' : 'MCQ'} deleted`);
-    if (currentDeck === chapterName && chapterContext && chapterContext.name === chapterName) {
+    window.deleteChapterItem = async function (chapterName, itemType, idx) {
+        const chapter = await getData('chapters', chapterName);
+        if (!chapter) return toast('Invalid chapter');
+        const list = itemType === 'flashcard' ? chapter.flashcards : chapter.mcqs;
+        if (!Array.isArray(list) || idx < 0 || idx >= list.length) return toast('Invalid item');
+        const result = await Swal.fire({
+            title: 'Delete this card?',
+            text: 'This cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
+        });
+        if (!result.isConfirmed) return;
+        list.splice(idx, 1);
+        await saveChapter(chapterName, chapter);
+        toast(`${itemType === 'flashcard' ? 'Flashcard' : 'MCQ'} deleted`);
+        if (currentDeck === chapterName && chapterContext && chapterContext.name === chapterName) {
+            chapterContext.flashcards = Array.isArray(chapter.flashcards) ? chapter.flashcards : [];
+            chapterContext.mcqs = Array.isArray(chapter.mcqs) ? chapter.mcqs : [];
+        }
+        await renderChapterManager(chapterName);
+        await renderStudyChapters();
+    };
+
+    window.deleteCurrentCard = async function () {
+        if (!chapterContext || !currentDeck) return;
+        const chapterName = chapterContext.name;
+        const chapter = await getData('chapters', chapterName);
+        if (!chapter) return toast('Invalid chapter');
+        const phase = chapterContext.phase;
+        const list = phase === 'flashcards' ? chapter.flashcards : chapter.mcqs;
+        if (!Array.isArray(list) || list.length === 0) return toast('Nothing to delete');
+        const idx = chapterContext.currentIndex;
+        if (idx < 0 || idx >= list.length) return toast('Invalid card');
+        const result = await Swal.fire({
+            title: 'Delete this card?',
+            text: 'Remove this card from the chapter permanently.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel'
+        });
+        if (!result.isConfirmed) return;
+        list.splice(idx, 1);
+        await saveChapter(chapterName, chapter);
+        toast('Card removed');
         chapterContext.flashcards = Array.isArray(chapter.flashcards) ? chapter.flashcards : [];
         chapterContext.mcqs = Array.isArray(chapter.mcqs) ? chapter.mcqs : [];
-    }
-    await renderChapterManager(chapterName);
-    await renderStudyChapters();
-};
-
-window.deleteCurrentCard = async function () {
-    if (!chapterContext || !currentDeck) return;
-    const chapterName = chapterContext.name;
-    const chapter = await getData('chapters', chapterName);
-    if (!chapter) return toast('Invalid chapter');
-    const phase = chapterContext.phase;
-    const list = phase === 'flashcards' ? chapter.flashcards : chapter.mcqs;
-    if (!Array.isArray(list) || list.length === 0) return toast('Nothing to delete');
-    const idx = chapterContext.currentIndex;
-    if (idx < 0 || idx >= list.length) return toast('Invalid card');
-    const result = await Swal.fire({
-        title: 'Delete this card?',
-        text: 'Remove this card from the chapter permanently.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel'
-    });
-    if (!result.isConfirmed) return;
-    list.splice(idx, 1);
-    await saveChapter(chapterName, chapter);
-    toast('Card removed');
-    chapterContext.flashcards = Array.isArray(chapter.flashcards) ? chapter.flashcards : [];
-    chapterContext.mcqs = Array.isArray(chapter.mcqs) ? chapter.mcqs : [];
-    if (phase === 'flashcards') {
-        if (chapterContext.currentIndex >= chapterContext.flashcards.length) chapterContext.currentIndex = Math.max(0, chapterContext.flashcards.length - 1);
-        showChapterFlashcard();
-    } else {
-        if (chapterContext.currentIndex >= chapterContext.mcqs.length) chapterContext.currentIndex = Math.max(0, chapterContext.mcqs.length - 1);
-        showChapterMCQ(chapterShuffleUnlocked);
-    }
-    await renderStudyChapters();
-};
-
-function finishChapter() {
-    const correct = chapterContext.answers.filter(a => a).length;
-    const total = chapterContext.mcqs.length;
-    const score = total ? Math.round(correct / total * 100) : 100;
-    const passed = score >= 80;
-    if (passed && !chapterShuffleUnlocked) { chapterShuffleUnlocked = true; toast('🎉 MCQ Mastered! Shuffle mode unlocked for this chapter.'); }
-    document.getElementById('card-area').innerHTML = `
-        <div style="text-align:center; padding:40px 20px;">
-            <div style="font-size:3rem; margin-bottom:12px;">📘</div>
-            <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:8px;">Chapter Complete: ${esc(chapterContext.name)}</div>
-            <div style="color:var(--text-3); font-size:0.85rem; margin-bottom:20px;">MCQ Score: ${correct}/${total} (${score}%)</div>
-            <button class="btn btn-primary" onclick="restartChapter()">Restart Chapter</button>
-            <button class="btn btn-ghost" onclick="exitStudy()" style="margin-top:12px;">← Back</button>
-        </div>`;
-}
-window.restartChapter = function () {
-    if (chapterContext) { chapterContext.currentIndex = 0; chapterContext.phase = 'flashcards'; chapterContext.answers = []; document.getElementById('study-meta-label').textContent = `Chapter: ${chapterContext.name} · Flashcards`; showChapterFlashcard(); }
-};
-
-function startTimer(sec) {
-    stopTimer();
-    timerSeconds = sec;
-    document.getElementById('timer-text').textContent = sec + 's';
-    timerInterval = setInterval(() => {
-        timerSeconds--;
-        const t = document.getElementById('timer-text');
-        if (t) t.textContent = timerSeconds + 's';
-        if (timerSeconds <= 0) {
-            stopTimer();
-            autoFail();
+        if (phase === 'flashcards') {
+            if (chapterContext.currentIndex >= chapterContext.flashcards.length) chapterContext.currentIndex = Math.max(0, chapterContext.flashcards.length - 1);
+            showChapterFlashcard();
+        } else {
+            if (chapterContext.currentIndex >= chapterContext.mcqs.length) chapterContext.currentIndex = Math.max(0, chapterContext.mcqs.length - 1);
+            showChapterMCQ(chapterShuffleUnlocked);
         }
-    }, 1000);
-}
+        await renderStudyChapters();
+    };
 
-function autoFail() {
-    if (!chapterContext || !currentCard) return;
-    if (chapterContext.phase === 'flashcards') {
-        finalizeChapterFlashcard('again');
-    } else if (chapterContext.phase === 'mcqs') {
-        chooseAnswer(0);
+    function finishChapter() {
+        const correct = chapterContext.answers.filter(a => a).length;
+        const total = chapterContext.mcqs.length;
+        const score = total ? Math.round(correct / total * 100) : 100;
+        const passed = score >= 80;
+        const xpEarned = correct * 10;
+
+        if (passed && !chapterShuffleUnlocked) {
+            chapterShuffleUnlocked = true;
+            toast('🎉 MCQ Mastered! Shuffle mode unlocked.');
+        }
+
+        // Find hardest card (first wrong answer index)
+        const hardestIdx = chapterContext.answers.findIndex(a => !a);
+        const hardestCard = hardestIdx !== -1 ? chapterContext.mcqs[hardestIdx] : null;
+
+        document.getElementById('card-area').innerHTML = `
+        <div style="text-align:center; padding:40px 20px;">
+            <div style="font-size:3rem; margin-bottom:12px;">${score >= 80 ? '🏆' : '📘'}</div>
+            <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; margin-bottom:20px;">
+                ${esc(chapterContext.name)} — Done
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:24px; text-align:center;">
+                <div style="background:var(--s2); border:1px solid var(--border); border-radius:12px; padding:14px 10px;">
+                    <div style="font-size:1.5rem; font-weight:800; color:var(--good)">${score}%</div>
+                    <div style="font-size:0.72rem; color:var(--text-3); margin-top:4px;">Accuracy</div>
+                </div>
+                <div style="background:var(--s2); border:1px solid var(--border); border-radius:12px; padding:14px 10px;">
+                    <div style="font-size:1.5rem; font-weight:800;">${correct}/${total}</div>
+                    <div style="font-size:0.72rem; color:var(--text-3); margin-top:4px;">Correct</div>
+                </div>
+                <div style="background:var(--s2); border:1px solid var(--border); border-radius:12px; padding:14px 10px;">
+                    <div style="font-size:1.5rem; font-weight:800; color:var(--accent)">+${xpEarned}</div>
+                    <div style="font-size:0.72rem; color:var(--text-3); margin-top:4px;">XP earned</div>
+                </div>
+            </div>
+            ${hardestCard ? `
+            <div style="background:var(--s2); border:1px solid var(--border); border-left:3px solid var(--bad); border-radius:10px; padding:14px 16px; text-align:left; margin-bottom:20px;">
+                <div style="font-size:0.7rem; font-weight:700; color:var(--bad); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;">⚠️ Hardest card</div>
+                <div style="font-size:0.88rem; color:var(--text-2);">${esc(hardestCard.question)}</div>
+            </div>` : ''}
+            <button class="btn btn-primary" style="width:100%; margin-bottom:10px;" onclick="restartChapter()">Study Again</button>
+            <button class="btn btn-ghost" style="width:100%;" onclick="exitStudy()">← Back to Chapters</button>
+        </div>`;
     }
-}
+    window.restartChapter = function () {
+        if (chapterContext) { chapterContext.currentIndex = 0; chapterContext.phase = 'flashcards'; chapterContext.answers = []; document.getElementById('study-meta-label').textContent = `Chapter: ${chapterContext.name} · Flashcards`; showChapterFlashcard(); }
+    };
 
-// Render chapters on study load
-async function renderStudyChapters() {
-    const chapterGrid = document.getElementById('chapter-grid');
-    chapterGrid.innerHTML = '';
-    const chapters = await getAllChapters();
-    for (const [name, ch] of Object.entries(chapters)) {
-        const card = document.createElement('div');
-        card.className = 'deck-card type-flash';
-        card.dataset.name = name;
-        card.onclick = () => startChapterStudy(name);
-        card.innerHTML = `
+    function startTimer(sec) {
+        stopTimer();
+        timerSeconds = sec;
+        document.getElementById('timer-text').textContent = sec + 's';
+        timerInterval = setInterval(() => {
+            timerSeconds--;
+            const t = document.getElementById('timer-text');
+            if (t) t.textContent = timerSeconds + 's';
+            if (timerSeconds <= 0) {
+                stopTimer();
+                autoFail();
+            }
+        }, 1000);
+    }
+
+    function autoFail() {
+        if (!chapterContext || !currentCard) return;
+        if (chapterContext.phase === 'flashcards') {
+            finalizeChapterFlashcard('again');
+        } else if (chapterContext.phase === 'mcqs') {
+            chooseAnswer(0);
+        }
+    }
+
+    // Render chapters on study load
+    async function renderStudyChapters() {
+        const chapterGrid = document.getElementById('chapter-grid');
+        chapterGrid.innerHTML = '';
+        const chapters = await getAllChapters();
+        for (const [name, ch] of Object.entries(chapters)) {
+            const card = document.createElement('div');
+            card.className = 'deck-card type-flash';
+            card.dataset.name = name;
+            card.onclick = () => startChapterStudy(name);
+            card.innerHTML = `
             <div class="deck-card-icon flash">📘</div>
             <div class="deck-card-name">${esc(name)}</div>
             <div class="deck-card-meta">${ch.flashcards.length} flashcards + ${ch.mcqs.length} MCQs</div>
@@ -807,10 +942,11 @@ async function renderStudyChapters() {
                 <span class="deck-type-pill flash">Chapter</span>
                 <div class="chapter-card-actions">
                     <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); openChapterManager(this.closest('.deck-card').dataset.name)">Manage</button>
+                    <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation(); startChapterMCQ(this.closest('.deck-card').dataset.name)">MCQ Only</button>
                     <button class="btn btn-ghost btn-sm delete-btn" onclick="event.stopPropagation(); deleteChapterAndRefresh(this.closest('.deck-card').dataset.name)">Delete</button>
                 </div>
             </div>`;
-        chapterGrid.appendChild(card);
+            chapterGrid.appendChild(card);
+        }
     }
-}
 </script>

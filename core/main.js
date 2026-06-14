@@ -39,7 +39,7 @@ async function loadModules() {
 async function initStats() {
     let stats = await getData('stats', 'main');
     if (!stats) {
-        stats = { totalAnswered: 0, totalCorrect: 0, streakDays: 0, lastStudyDay: '', xp: 0, xpFreezes: 0, dailyXp: {}, doubleXpExpiry: 0, hintTokens: 0, unlockedThemes: ['default'], dailyActivity: {}, retentionLogs: [], achievements: {}, dailyChallenge: null };
+        stats = { totalAnswered: 0, totalCorrect: 0, streakDays: 0, lastStudyDay: '', xp: 0, xpFreezes: 0, dailyXp: {}, doubleXpExpiry: 0, hintTokens: 0, unlockedThemes: ['default'], dailyActivity: {}, retentionLogs: [], achievements: {}, dailyChallenge: null, firstUseDate: new Date().toISOString().slice(0, 10) };
         await setData('stats', 'main', stats);
     }
     if (stats.xpFreezes === undefined) stats.xpFreezes = 0;
@@ -49,6 +49,10 @@ async function initStats() {
     if (!stats.retentionLogs) stats.retentionLogs = [];
     if (!stats.achievements) stats.achievements = {};
     if (!stats.dailyChallenge) stats.dailyChallenge = null;
+    if (!stats.firstUseDate) {
+        stats.firstUseDate = stats.lastStudyDay || new Date().toISOString().slice(0, 10);
+        await setData('stats', 'main', stats);
+    }
     return stats;
 }
 
@@ -131,7 +135,7 @@ async function triggerAdvancedDopamineReward(isCorrect, durationSeconds, anchors
     stats.totalAnswered++;
     if (isCorrect) { stats.totalCorrect++; currentSessionCombo++; if (currentSessionCombo >= 3) SoundManager.playCombo(); }
     else currentSessionCombo = 0;
-    let baseXP = isCorrect ? 10 : -2;
+    let baseXP = isCorrect ? 10 : 1;
     if (isCorrect && durationSeconds <= 3) baseXP = 15;
     if (currentSessionCombo >= 3) baseXP = Math.round(baseXP * 1.5);
     let actualXpGain = baseXP;

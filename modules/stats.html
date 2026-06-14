@@ -94,7 +94,7 @@
         <div id="achievements-box" style="display:flex; flex-wrap:wrap; gap:8px; font-size:1.5rem;"></div>
     </div>
     <div class="stat-box" style="margin-bottom:20px;">
-        <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">Activity Heatmap (Last 12 Weeks)</div>
+        <div class="stat-lbl" style="font-weight:600; margin-bottom:8px;">Activity Heatmap</div>
         <div id="heatmap-grid"
             style="display:flex; gap:4px; overflow-x:auto; padding:4px; justify-content:space-between;"></div>
     </div>
@@ -115,21 +115,28 @@ const ACHIEVEMENTS = {
     streak7: { name: 'Week Warrior', desc: '7-day streak', icon: '📅' }
 };
 
-function renderHeatmap(dailyActivity) {
+function renderHeatmap(dailyActivity, firstUseDate) {
     const grid = document.getElementById('heatmap-grid');
     if (!grid) return;
     grid.innerHTML = '';
-    const days = 84;
+    const maxDays = 84;
     const now = new Date();
-    for (let w = 0; w < 12; w++) {
+    const installDate = firstUseDate ? new Date(firstUseDate + 'T00:00:00') : null;
+    const validInstallDate = installDate && !Number.isNaN(installDate.getTime()) ? installDate : null;
+    const startDate = validInstallDate && validInstallDate > now ? now : (validInstallDate || new Date(now.getTime() - (maxDays - 1) * 24 * 60 * 60 * 1000));
+    const daysSinceStart = Math.ceil((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    const totalDays = Math.min(maxDays, daysSinceStart);
+    const columns = Math.ceil(totalDays / 7);
+    for (let w = 0; w < columns; w++) {
         const weekCol = document.createElement('div');
         weekCol.style.display = 'grid';
         weekCol.style.gridTemplateRows = 'repeat(7, 1fr)';
         weekCol.style.gap = '4px';
         for (let d = 0; d < 7; d++) {
             const dayIdx = w * 7 + d;
-            const date = new Date();
-            date.setDate(now.getDate() - (days - 1 - dayIdx));
+            const date = new Date(startDate);
+            date.setDate(startDate.getDate() + dayIdx);
+            if (date > now) break;
             const dateStr = date.toISOString().slice(0, 10);
             const count = dailyActivity[dateStr] || 0;
             const box = document.createElement('div');
@@ -171,7 +178,7 @@ async function renderStatsSection(stats) {
         achBox.innerHTML += `<span style="filter:${earned ? 'grayscale(0)' : 'grayscale(1)'}; opacity:${earned ? 1 : 0.3};" title="${ach.name}: ${ach.desc}">${ach.icon}</span>`;
     }
 
-    renderHeatmap(stats.dailyActivity || {});
+    renderHeatmap(stats.dailyActivity || {}, stats.firstUseDate);
 
     const usage = await getStorageUsageMB();
     const pct = Math.min(100, (usage / 100) * 100);

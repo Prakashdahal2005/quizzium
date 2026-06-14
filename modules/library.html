@@ -39,14 +39,14 @@
     {
       "chapter": "Digital Logic",
       "flashcards": [
-        { "front": "What is a NAND gate?", "back": "A universal gate that outputs 0 only if all inputs are 1." }
+        { "id": "fc_001", "front": "What is a NAND gate?", "back": "A universal gate that outputs 0 only if all inputs are 1." }
       ],
       "mcqs": [
         {
+          "id": "mcq_001",
           "question": "Which gate is universal?",
-          "option1": "AND", "option2": "OR",
-          "option3": "NAND", "option4": "XOR",
-          "correct": 3,
+          "options": ["AND", "OR", "NAND", "XOR"],
+          "correct": 2,
           "explanation": "NAND can be used to create all other gates."
         }
       ]
@@ -59,6 +59,155 @@
 </div>
 
 <script>
+function slugify(text) {
+    return String(text || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+}
+
+function makeUniqueId(prefix, existingIds) {
+    let id;
+    do {
+        id = `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
+    } while (existingIds.has(id));
+    existingIds.add(id);
+    return id;
+}
+
+function normalizeFlashcardItem(item, chapterName, idx, existingIds) {
+    const front = String(item.front || item.question || '').trim();
+    const back = String(item.back || item.answer || '').trim();
+    let id = String(item.id || item._id || `${slugify(chapterName)}_fc_${String(idx + 1).padStart(3, '0')}`);
+    if (!id || existingIds.has(id)) id = makeUniqueId(`${slugify(chapterName)}_fc`, existingIds);
+    else existingIds.add(id);
+    return { id, front, back };
+}
+
+function parseMCQOptions(optionsField) {
+    if (Array.isArray(optionsField)) {
+        const normalized = optionsField.flatMap(opt => {
+            if (opt == null) return [];
+            const str = String(opt).trim();
+            if (!str) return [];
+            if (str.startsWith('[') && str.endsWith(']')) {
+                try {
+                    const parsed = JSON.parse(str);
+                    if (Array.isArray(parsed)) return parseMCQOptions(parsed);
+                } catch (e) {
+                    // ignore and continue
+                }
+            }
+            return str.split(/[\r\n;,|]+/).map(v => String(v || '').trim()).filter(v => v !== '');
+        });
+        return normalized.length ? normalized : [''];
+    }
+    if (optionsField && typeof optionsField === 'object') {
+        const keys = Object.keys(optionsField);
+        const isNumericKeys = keys.every(k => String(parseInt(k, 10)) === k);
+        const sortedKeys = isNumericKeys ? keys.sort((a, b) => parseInt(a, 10) - parseInt(b, 10)) : keys;
+        const values = sortedKeys.map(k => optionsField[k]);
+        return parseMCQOptions(values);
+    }
+    if (typeof optionsField === 'string') {
+        const trimmed = optionsField.trim();
+        if (!trimmed) return [];
+        if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                if (Array.isArray(parsed)) {
+                    const normalized = parseMCQOptions(parsed);
+                    return normalized.length ? normalized : [''];
+                }
+            } catch (e) {
+                // fall through to delimiter parsing
+            }
+        }
+        const parts = trimmed
+            .split(/[\r\n;,|]+/)
+            .map(opt => String(opt || '').trim())
+            .filter(opt => opt !== '');
+        return parts.length ? parts : [''];
+    }
+    return [];
+}
+
+function normalizeMCQItem(item, chapterName, idx, existingIds) {
+    const question = String(item.question || item.front || '').trim();
+    const usingLegacyOptionFields = !Array.isArray(item.options) && ('option1' in item || 'option2' in item || 'option3' in item || 'option4' in item);
+    let options = parseMCQOptions(item.options);
+    if (!options.length) {
+        options = [item.option1, item.option2, item.option3, item.option4]
+            .filter(o => o !== undefined)
+            .map(o => String(o || '').trim());
+    }
+    options = options.filter(opt => opt !== '');
+    if (!options.length) options = [''];
+    let correct = Number(item.correct);
+    if (!Number.isFinite(correct)) correct = 0;
+    if (usingLegacyOptionFields && correct >= 1) correct = correct - 1;
+    correct = Math.max(0, Math.min(correct, options.length - 1));
+    const explanation = String(item.explanation || '').trim();
+    let id = String(item.id || item._id || `${slugify(chapterName)}_mcq_${String(idx + 1).padStart(3, '0')}`);
+    if (!id || existingIds.has(id)) id = makeUniqueId(`${slugify(chapterName)}_mcq`, existingIds);
+    else existingIds.add(id);
+    return { id, question, options, correct, explanation };
+}
+
+function normalizeChapter(chapter, chapterName) {
+    const name = String(chapterName || chapter.chapter || 'untitled');
+    const flashcardIds = new Set();
+    const mcqIds = new Set();
+    const flashcards = Array.isArray(chapter.flashcards)
+        ? chapter.flashcards.map((fc, idx) => normalizeFlashcardItem(fc, name, idx, flashcardIds))
+        : [];
+    const mcqs = Array.isArray(chapter.mcqs)
+        ? chapter.mcqs.map((cq, idx) => normalizeMCQItem(cq, name, idx, mcqIds))
+        : [];
+    return { chapter: name, flashcards, mcqs };
+}
+
+function fingerprintFlashcard(item) {
+    return `${item.front || ''}||${item.back || ''}`;
+}
+
+function fingerprintMCQ(item) {
+    return `${item.question || ''}||${item.options?.join('||') || ''}||${item.correct}||${item.explanation || ''}`;
+}
+
+function mergeChapterData(existingChapter, incomingChapter) {
+    const existing = normalizeChapter(existingChapter || { chapter: incomingChapter.chapter }, existingChapter?.chapter || incomingChapter.chapter);
+    const incoming = normalizeChapter(incomingChapter, incomingChapter.chapter);
+    const merged = { chapter: incoming.chapter, flashcards: [...existing.flashcards], mcqs: [...existing.mcqs] };
+    const flashcardMap = new Map(existing.flashcards.map(item => [item.id, item]));
+    const flashcardFingerprint = new Set(existing.flashcards.map(item => fingerprintFlashcard(item)));
+    for (const item of incoming.flashcards) {
+        if (item.id && flashcardMap.has(item.id)) {
+            const idx = merged.flashcards.findIndex(i => i.id === item.id);
+            if (idx >= 0) merged.flashcards[idx] = item;
+            else merged.flashcards.push(item);
+            flashcardFingerprint.add(fingerprintFlashcard(item));
+        } else if (!flashcardFingerprint.has(fingerprintFlashcard(item))) {
+            merged.flashcards.push(item);
+            flashcardFingerprint.add(fingerprintFlashcard(item));
+        }
+    }
+    const mcqMap = new Map(existing.mcqs.map(item => [item.id, item]));
+    const mcqFingerprint = new Set(existing.mcqs.map(item => fingerprintMCQ(item)));
+    for (const item of incoming.mcqs) {
+        if (item.id && mcqMap.has(item.id)) {
+            const idx = merged.mcqs.findIndex(i => i.id === item.id);
+            if (idx >= 0) merged.mcqs[idx] = item;
+            else merged.mcqs.push(item);
+            mcqFingerprint.add(fingerprintMCQ(item));
+        } else if (!mcqFingerprint.has(fingerprintMCQ(item))) {
+            merged.mcqs.push(item);
+            mcqFingerprint.add(fingerprintMCQ(item));
+        }
+    }
+    return merged;
+}
+
 function setupDrop(zoneId, jsonId, nameId) {
     const zone = document.getElementById(zoneId);
     zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging'); });
@@ -109,17 +258,18 @@ window.uploadChapter = async function () {
         else throw new Error('Invalid chapter format');
         if (!chapters.length) throw new Error('No chapters found');
         for (const chapter of chapters) {
-            if (!chapter.chapter || !Array.isArray(chapter.flashcards) || !Array.isArray(chapter.mcqs)) throw new Error('Invalid chapter item');
-            await saveChapter(chapter.chapter, {
-                chapter: chapter.chapter,
-                flashcards: chapter.flashcards,
-                mcqs: chapter.mcqs
-            });
+            if (!chapter.chapter) throw new Error('Invalid chapter item');
+            if (chapter.flashcards && !Array.isArray(chapter.flashcards)) throw new Error('Invalid flashcards list');
+            if (chapter.mcqs && !Array.isArray(chapter.mcqs)) throw new Error('Invalid mcqs list');
+            const existing = await getData('chapters', chapter.chapter);
+            const merged = mergeChapterData(existing, chapter);
+            await saveChapter(chapter.chapter, merged);
         }
         toast(`Imported ${chapters.length} chapter${chapters.length === 1 ? '' : 's'}!`);
         document.getElementById('chapter-json').value = '';
         await loadStats();
     } catch (e) {
+        console.error(e);
         toast('Invalid chapter JSON structure');
     }
 };

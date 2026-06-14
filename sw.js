@@ -7,7 +7,7 @@ const STATIC_ASSETS = [
   './icon2.png',
   './core/style.css',
   './core/main.js',
-  './core/appjs',
+  './core/app.js',
   './modules/study.html',
   './modules/library.html',
   './modules/stats.html',
